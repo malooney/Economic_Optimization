@@ -1,9 +1,10 @@
 # Economic_Optimization
 
-##Course Objective
+Course Objective  
+  
 The purpose of the course is to study the applications of optimization models in economics. Our focus of study is to develop the ability to formulate economizing problems as well-defined optimization problems, solve them algebraically or with the aid of optimization software, and interpret the solutions. Theoretical development of optimization techniques is not emphasized in this course.  
   
-##Reference Books  
+Reference Books  
   
 Mario J. Miranda and Paul L. Fackler. Applied Computational Economics and Finance. The MIT Press. 2002.  
   
