@@ -2,12 +2,34 @@
 title: "Giapetto's Woodcarving Problem"
 author: "Matthew Aaron Looney"
 date: "9/7/2017"
-output: pdf_document
+output:
+  pdf_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: no
+    toc_depth: 4
+  html_document:
+    toc: yes
+    toc_depth: '4'
+header-includes:
+- \usepackage{graphicx}
+- \usepackage{rotating}
+- \usepackage{longtable}
+- \usepackage{amssymb,amsmath}
+- \usepackage{dcolumn}
+- \usepackage{setspace}\doublespacing
+- \usepackage{mathrsfs}
+- \usepackage{eso-pic,graphicx,transparent}
 ---
 
-```{r}
+```{r House Keeping, echo=FALSE, message=FALSE, cache=T}
 
 library(lpSolve)
+
+```
+
+```{r, echo=FALSE, message=FALSE, cache=T}
+
 obj.fun <- c(3, 2)
 
 constr <- matrix(c(2, 1, 1, 1, 0, -1, 1, 0, -1, 0), ncol = 2, byrow=
@@ -19,4 +41,3 @@ rhs <- c(100, 80, 0, 40, 0)
 
 prod.sol <- lp("max", obj.fun, constr, constr.dir, rhs, compute.sens = TRUE)
 ```
-
