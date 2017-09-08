@@ -22,13 +22,13 @@ header-includes:
 - \usepackage{eso-pic,graphicx,transparent}
 ---
 
-```{r House Keeping, echo=FALSE, message=FALSE, cache=T}
+```{r House Keeping, echo=FALSE, message=FALSE, cache=F}
 
 library(lpSolve)
 
 ```
 
-```{r, echo=FALSE, message=FALSE, cache=T}
+```{r, echo=FALSE, message=FALSE, cache=F}
 
 obj.fun <- c(3, 2)
 
@@ -40,4 +40,5 @@ constr.dir <- c("<=", "<=", "<=", "<=", "<=")
 rhs <- c(100, 80, 0, 40, 0)
 
 prod.sol <- lp("max", obj.fun, constr, constr.dir, rhs, compute.sens = TRUE)
+
 ```
