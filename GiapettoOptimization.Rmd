@@ -20,6 +20,9 @@ header-includes:
 - \usepackage{setspace}\doublespacing
 - \usepackage{mathrsfs}
 - \usepackage{eso-pic,graphicx,transparent}
+
+fontsize: 12pt
+geometry: margin = 1.25in
 ---
 
 ```{r House Keeping, echo=FALSE, message=FALSE, cache=F}
@@ -42,3 +45,16 @@ rhs <- c(100, 80, 0, 40, 0)
 prod.sol <- lp("max", obj.fun, constr, constr.dir, rhs, compute.sens = TRUE)
 
 ```
+
+# Giapetto's Woodcarving, Inc. Example  
+  
+Gaipetto's Woodcarving, Inc. manufatures two types of wooden toys: soliders and trains.  
+  
+A solider sells for $27 and uses $10 worth of raw materials. Each solider that is manufactured increases Giapetto's variable labor and overhead costs by $14. A train sells for $21 and uses $9 worth of raw materials. Each train build increases Giapetto's variable labor and overhead costs by $10.  
+  
+The manufacturing of wooden soliders and trains requires two types of skilled labor. A solider requires 2 hours of finishing labor and 1 hour of carprentry labor. A train requires 1 hour of finishing labor and 1 hour of carpentry labor. Each week, Giapetto can obtain all the needed raw but only 100 finishing hours and 80 carpentry hours.  
+  
+Demand for trains is unlimited, but at most 40 soliders are bought each week. Giapetto wants to maximize weekly profit (revenues - costs).  
+  
+Formulate a mathematical model of Giapetto's situation that can be used to maximize Giapetto's weekly profit.  
+  
