@@ -30,7 +30,7 @@ geometry: margin = 1.25in
 library(lpSolve)
 
 ```
-
+  
 ```{r Giapetto, echo=FALSE, message=FALSE, cache=F}
 
 obj.fun <- c(3, 2)
@@ -44,22 +44,10 @@ rhs <- c(100, 80, 0, 40, 0)
 
 prod.sol <- lp("max", obj.fun, constr, constr.dir, rhs, compute.sens = TRUE)
 
-prod.sol
-prod.sol$solution
-
+# prod.sol
+# prod.sol$solution
+# constr %*% prod.sol$solution # check that constraints are satisfied
 ```
-
-# Giapetto's Woodcarving, Inc. Example  
-  
-Gaipetto's Woodcarving, Inc. manufatures two types of wooden toys: soliders and trains.  
-  
-A solider sells for $27 and uses $10 worth of raw materials. Each solider that is manufactured increases Giapetto's variable labor and overhead costs by $14. A train sells for $21 and uses $9 worth of raw materials. Each train build increases Giapetto's variable labor and overhead costs by $10.  
-  
-The manufacturing of wooden soliders and trains requires two types of skilled labor. A solider requires 2 hours of finishing labor and 1 hour of carprentry labor. A train requires 1 hour of finishing labor and 1 hour of carpentry labor. Each week, Giapetto can obtain all the needed raw but only 100 finishing hours and 80 carpentry hours.  
-  
-Demand for trains is unlimited, but at most 40 soliders are bought each week. Giapetto wants to maximize weekly profit (revenues - costs).  
-  
-Formulate a mathematical model of Giapetto's situation that can be used to maximize Giapetto's weekly profit.  
   
 ```{r Dorian, echo=FALSE, message=FALSE, cache=F}
 
@@ -74,12 +62,12 @@ rhs1 <- c(24000000, 28000000, 0, 0)
 
 prod.sol1 <- lp("min", obj.fun1, constr1, constr.dir1, rhs1, compute.sens = TRUE, all.int=F)
 
-prod.sol1
-prod.sol1$solution
-constr1 %*% prod.sol1$solution
+# prod.sol1
+# prod.sol1$solution
+# constr1 %*% prod.sol1$solution # check that constraints are satisfied
 
 ```
-
+  
 ```{r Dorian_Integer, echo=FALSE, message=FALSE, cache=F}
 
 obj.fun1 <- c(50000, 100000)
@@ -93,7 +81,44 @@ rhs1 <- c(24000000, 28000000, 0, 0)
 
 prod.sol2 <- lp("min", obj.fun1, constr1, constr.dir1, rhs1, compute.sens = TRUE, all.int=T)
 
-prod.sol2
-prod.sol2$solution
-constr1 %*% prod.sol2$solution
+# prod.sol2
+# prod.sol2$solution
+# constr1 %*% prod.sol2$solution # check that constraints are satisfied
 ```
+
+# Giapetto's Woodcarving, Inc. Example  
+  
+Gaipetto's Woodcarving, Inc. manufactures two types of wooden toys: soldiers and trains.  
+  
+A solider sells for $27 and uses $10 worth of raw materials. Each solider that is manufactured increases Giapetto's variable labor and overhead costs by $14. A train sells for $21 and uses $9 worth of raw materials. Each train build increases Giapetto's variable labor and overhead costs by $10.  
+  
+The manufacturing of wooden soldiers and trains requires two types of skilled labor. A solider requires 2 hours of finishing labor and 1 hour of carpentry labor. A train requires 1 hour of finishing labor and 1 hour of carpentry labor. Each week, Giapetto can obtain all the needed raw but only 100 finishing hours and 80 carpentry hours.  
+  
+Demand for trains is unlimited, but at most 40 soldiers are bought each week. Giapetto wants to maximize weekly profit (revenues - costs).  
+  
+Formulate a mathematical model of Giapetto's situation that can be used to maximize Giapetto's weekly profit.  
+  
+  
+  
+  
+  
+  
+# Dorian Auto Example  
+  
+Dorian Auto manufactures luxury cars and trucks. The company believes that its most likely customers are high-income women and men. To reach these groups, Dorian Auto has embarked on an ambitious TV advertising campaign and has decided to purchase 1-minute commercial spots on two types of programs: comedy show and football games.  
+  
+Each comedy commercial is seen by 7 million high-income women and 2 million high-income men. Each football commercial is seen by 2 million high-income women and 12 million high-income men.  
+  
+A 1-minute comedy ad costs $50,000 and a 1-minute football ad costs $100,000. Dorian would like the commercials to be seen by at least 28 million high-income women and 24 million high-income men.  
+  
+Use linear programming to determine how Dorian Auto can meet its advertising requirements at minimum cost.  
+  
+
+
+
+
+
+
+
+
+
