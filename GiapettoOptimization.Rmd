@@ -31,7 +31,7 @@ library(lpSolve)
 
 ```
 
-```{r, echo=FALSE, message=FALSE, cache=F}
+```{r Giapetto, echo=FALSE, message=FALSE, cache=F}
 
 obj.fun <- c(3, 2)
 
@@ -43,6 +43,9 @@ constr.dir <- c("<=", "<=", "<=", "<=", "<=")
 rhs <- c(100, 80, 0, 40, 0)
 
 prod.sol <- lp("max", obj.fun, constr, constr.dir, rhs, compute.sens = TRUE)
+
+prod.sol
+prod.sol$solution
 
 ```
 
@@ -58,3 +61,39 @@ Demand for trains is unlimited, but at most 40 soliders are bought each week. Gi
   
 Formulate a mathematical model of Giapetto's situation that can be used to maximize Giapetto's weekly profit.  
   
+```{r Dorian, echo=FALSE, message=FALSE, cache=F}
+
+obj.fun1 <- c(50000, 100000)
+
+constr1 <- matrix(c(12000000, 2000000, 2000000, 7000000, 0, 1, 1, 0), ncol = 2, byrow=
+                   TRUE)
+
+constr.dir1 <- c(">=", ">=", ">", ">")
+
+rhs1 <- c(24000000, 28000000, 0, 0)
+
+prod.sol1 <- lp("min", obj.fun1, constr1, constr.dir1, rhs1, compute.sens = TRUE, all.int=F)
+
+prod.sol1
+prod.sol1$solution
+constr1 %*% prod.sol1$solution
+
+```
+
+```{r Dorian_Integer, echo=FALSE, message=FALSE, cache=F}
+
+obj.fun1 <- c(50000, 100000)
+
+constr1 <- matrix(c(12000000, 2000000, 2000000, 7000000, 0, 1, 1, 0), ncol = 2, byrow=
+                   TRUE)
+
+constr.dir1 <- c(">=", ">=", ">", ">")
+
+rhs1 <- c(24000000, 28000000, 0, 0)
+
+prod.sol2 <- lp("min", obj.fun1, constr1, constr.dir1, rhs1, compute.sens = TRUE, all.int=T)
+
+prod.sol2
+prod.sol2$solution
+constr1 %*% prod.sol2$solution
+```
