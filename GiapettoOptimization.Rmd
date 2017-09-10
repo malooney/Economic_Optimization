@@ -21,7 +21,7 @@ header-includes:
 - \usepackage{mathrsfs}
 - \usepackage{eso-pic,graphicx,transparent}
 
-fontsize: 12pt
+# fontsize: 10pt
 geometry: margin = 1.25in
 ---
 
@@ -88,6 +88,8 @@ prod.sol2 <- lp("min", obj.fun1, constr1, constr.dir1, rhs1, compute.sens = TRUE
 
 # Giapetto's Woodcarving, Inc. Example  
   
+## Problem Paramaters:  
+  
 Gaipetto's Woodcarving, Inc. manufactures two types of wooden toys: soldiers and trains.  
   
 A solider sells for $27 and uses $10 worth of raw materials. Each solider that is manufactured increases Giapetto's variable labor and overhead costs by $14. A train sells for $21 and uses $9 worth of raw materials. Each train build increases Giapetto's variable labor and overhead costs by $10.  
@@ -98,10 +100,82 @@ Demand for trains is unlimited, but at most 40 soldiers are bought each week. Gi
   
 Formulate a mathematical model of Giapetto's situation that can be used to maximize Giapetto's weekly profit.  
   
+## Proposed Solution:  
   
+Our goal is to maximize profits. We need to formulate a linear profit function (objective function) and identify our linear constraints.  
+
+\[\mathop {\max }\limits_{{x_i}} f(x_i){\text{ s.t. constraints}}\]
   
+We know that $\pi=R-C$  
   
+$R=27x_1+21x_2$,  
   
+$C=10x_1+9x_2+14x_1+10x_2$  
+  
+
+where,
+  
+$R=$ total revenue, $C=$ total cost, $x_1$ is quantity of soldiers, and $x_2$ is quantity of trains.
+  
+Then our objective profit function is given by,  
+  
+$f(x_i)=\pi=3x_1+2x_2$  
+  
+Our constraints are as follows:  
+  
+\begin{gather*}
+2x_s + x_t \le 100 \\
+x_s + x_t \le 80 \\
+-x_t \le 0 \\
+x_s \le 40 \\
+-x_s \le 0
+\end{gather*}
+  
+We can formulate in matrix form and solve with either Matlab's linprog algorithm or R's lp algorithm.  
+  
+Construct A-Matrix of LHS constraints:  
+  
+\[A = \left[ {\begin{array}{*{20}{c}}
+  2&1 \\ 
+  1&1 \\ 
+  0&{ - 1} \\ 
+  1&0 \\ 
+  { - 1}&0 
+\end{array}} \right]\]
+  
+Construct b-matrix of RHS constraints:
+  
+\[b = \left[ {\begin{array}{*{20}{c}}
+  {100}&{80}&0&{40}&0 
+\end{array}} \right]\]
+  
+Objective function:  
+  
+\[f = \left[ {\begin{array}{*{20}{c}}
+  3&2 
+\end{array}} \right]\]
+  
+Need to invert signs on objective function, ie. f(x) to -f(x) for a max. problem (if using Matlab).  
+  
+Matlabs Code:  
+  
+[x_lp, eval_lp]= linprog(-f,A,b)  
+A*x_lp % verify constraints are satisfied  
+  
+The above code generates the following output:  
+  
+x_lp = 
+    20
+    60
+  
+ans = 
+   100
+    80
+   -60
+    20
+   -20
+  
+So when $x_1=20$ and $x_2=60$ we are maximizing profits of 180 and all constraints are satisfied.
   
 # Dorian Auto Example  
   
