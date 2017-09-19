@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This is a function solving for Giapetto's Woodcarving problem.
 
-function [x fval lambda] = giap(P1, Cm1, Cvf1, Lf1, Lc1, P2, Cm2, Cvf2, Lf2, Lc2, Lfmax, Lcmax, D1max)
+function [x, fval, lambda] = giap_Wang(P1, Cm1, Cvf1, Lf1, Lc1, P2, Cm2, Cvf2, Lf2, Lc2, Lfmax, Lcmax, D1max)
 
 pi1 = P1 - (Cm1 + Cvf1);      %weekly profit per wooden soldier
 pi2 = P2 - (Cm2 + Cvf2);      %weekly profit per wooden train
@@ -28,5 +28,5 @@ ub = [D1max; Inf];
 
 % Call the linear programming routine.
 
-[x, fval, exitflag, output, lambda] = linprog(f,A,b,[],[],lb,ub);
+[x, fval, ~, ~, lambda] = linprog(f,A,b,[],[],lb,ub);
 end
