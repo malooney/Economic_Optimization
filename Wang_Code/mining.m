@@ -7,7 +7,7 @@
 % Enter model parameters
   price = 1;                    % price of ore
   sbar  = 60;                   % initial ore stock
-  delta = 0.8;                  % discount factor  
+  delta = 0.9;                  % discount factor  
   
 % Construct state and action spaces
   S = (0:sbar)';                % vector of states
