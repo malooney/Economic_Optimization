@@ -1,8 +1,6 @@
 % DEMDDP01 Mine Management Model
   fprintf('\nDEMDDP01 MINE MANAGEMENT MODEL\n')
   close all
-  clear
-  clc
 
 % Enter model parameters
   price = 1;                    % price of ore
