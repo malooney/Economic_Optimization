@@ -7,7 +7,7 @@
 % Enter model parameters
   price = 1;                    % price of ore
   sbar  = 60;                   % initial ore stock
-  delta = 0.9;                  % discount factor  
+  delta = 0.8;                  % discount factor  
   
 % Construct state and action spaces
   S = (0:sbar)';                % vector of states
@@ -15,11 +15,12 @@
   n = length(S);                % number of states
   m = length(X);                % number of actions
 
-
 % Construct reward function (f) and state transition function (g)
 % Non-vectorized version
-if 1
-  f = zeros(n,m);
+% if 1
+    
+  f= zeros(n,m);
+  
   for i=1:n
   for k=1:m
     if X(k)<=S(i)
@@ -29,6 +30,7 @@ if 1
     end
   end
   end 
+  
   g = zeros(n,m);
   for i=1:n
   for k=1:m
@@ -36,16 +38,16 @@ if 1
     g(i,k) = getindex(snext,S);
   end
   end
-% Vectorized version
-else
-  [SS,XX] = gridmake(S,X);
-  f = (price-XX./(1+SS)).*XX;
-  f(XX>SS) = -inf;
-  f = reshape(f,n,m);
-  g = getindex(SS-XX,SS);
-  g = reshape(g,n,m);
-  clear SS XX
-end
+% % Vectorized version
+% else
+%   [SS,XX] = gridmake(S,X);
+%   f = (price-XX./(1+SS)).*XX;
+%   f(XX>SS) = -inf;
+%   f = reshape(f,n,m);
+%   g = getindex(SS-XX,SS);
+%   g = reshape(g,n,m);
+%   clear SS XX
+% end
 
 % Pack model data
   clear model
@@ -70,7 +72,7 @@ end
 
 % Generate optimal state and action paths
   sinit = getindex(sbar,S); nyrs = 15;
-  [spath xpath] = ddpsimul(pstar,sinit,nyrs,x);
+  [spath, xpath] = ddpsimul(pstar,sinit,nyrs,x);
 
 % Plot optimal state path
   subplot(2,2,3);
