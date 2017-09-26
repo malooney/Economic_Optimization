@@ -20,7 +20,7 @@ fprintf('\nCake Eating MODEL\n')
 
 % Enter model parameters
 finite = 0;     % finite horizon 0/1
-T = 10;         % Time horizon
+T = 15;         % Time horizon
 
 % A discount factor, beta, which indicates the agents measure of time 
 % preference, with a higher beta meaning valuing future more and thus
@@ -30,13 +30,13 @@ T = 10;         % Time horizon
 % value of alpha means a greater preference for low risk, or a higher
 % preference for more consumption over the long run.
 
-alpha = 0.2;        % elasticity of utility parameter
+alpha = 0.5;        % elasticity of utility parameter
 beta = 0.8;         % discount factor
 
 tp = 0.5;       % time pause between plot iterations
 
 % % Construct state and action spaces
-N = 100;                   % grid size
+N = 1000;                   % grid size
 k = linspace(0,1,N)';       % cake fractions
 
 figure('units','normalized','outerposition',[0 0 0.75 1]) % make plot window open to X-fraction of screen
