@@ -29,8 +29,8 @@
   m = length(X);                % number of actions
   
 figure('units','normalized','outerposition',[0 0 0.75 1]) % make plot window open to X-fraction of screen
-figure(1); hold on % allow plot build-up
-tp= 1;
+figure(1); hold on  % allow plot build-up
+tp= 1;              % time pause between plot iterations
 
 % Construct reward function
 for z= 1:numel(alpha1)
@@ -71,8 +71,6 @@ for z= 1:numel(alpha1)
 % Plot optimal policy
   subplot(2,2,1); 
   plot(S,X(x),'*'); 
-  % set(h,'FaceColor',[.75 .75 .75])
-  % axis([0 maxcap -inf inf]);
   title('Optimal Irrigation Policy');
   xlabel('Water Level'); ylabel('Irrigation');
   xlim([-1 31]);
@@ -140,10 +138,6 @@ hold on;
   
   z= z+1;
   pause(tp)
-  
-  % Compute steady-state water level
-  % avgstock = zeros(1,3);
-  % fprintf('\nSteady-state Stock        %8.2f\n',avgstock)
   
 end
   
