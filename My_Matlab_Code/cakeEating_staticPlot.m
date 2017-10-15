@@ -1,5 +1,4 @@
-
-% cakeEating_staticPlot.m
+% CakeEating_staticPlot.m
 % need utilityFn.m file, a function to define the utility function
 
 % References:
@@ -30,7 +29,7 @@ T = 15;         % Time horizon
 % value of alpha means a greater preference for low risk, or a higher
 % preference for more consumption over the long run.
 
-alpha = 0.5;        % elasticity of utility parameter
+alpha = 0.2;        % elasticity of utility parameter
 beta = 0.8;         % discount factor
 
 tp = 0.5;       % time pause between plot iterations

@@ -22,7 +22,7 @@ v = @(x)0.2* x(1)^2+ 0.08* x(2)^2+ 0.18*x(3)^2+ 0.1* x(1)* x(2)+ 0.04* x(1)* x(3
 
 for i = 1:numel(returns)
     b = -returns(i);
-[x, fval] = fmincon(v, x0, A, b, Aeq, beq, lb, [], [], options);
+[x, fval, lambda] = fmincon(v, x0, A, b, Aeq, beq, lb, [], [], options);
 sd = [sd sqrt(fval)];
 stocks = [stocks x];
 end
