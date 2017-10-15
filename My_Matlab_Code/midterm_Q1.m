@@ -4,7 +4,7 @@ clear;
 
 i= 1;       % price counter
 
-P_x= linspace(2000, 4000, 300);
+P_x= linspace(2000, 4000, 30);
 
 beq= [10000];
 lb=[0 0];
