@@ -3,6 +3,7 @@
 % This program solves the water management model under the high rainfall
 % scenario.
   fprintf('\nDEMDDP05 WATER MANAGEMENT MODEL\n')
+  warning ('off','all');
   close all
   clear
   clc
