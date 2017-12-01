@@ -1,0 +1,12 @@
+name: Energy_Portfolio_Optim_App
+title: Energy_Portfolio_Optim_App
+username:
+account: malooney
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 234068
+bundleId: 1083732
+url: https://malooney.shinyapps.io/Energy_Portfolio_Optim_App/
+when: 1511067872.18546
+asMultiple: FALSE
+asStatic: FALSE
