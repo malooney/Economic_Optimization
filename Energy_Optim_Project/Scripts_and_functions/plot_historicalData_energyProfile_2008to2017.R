@@ -14,7 +14,8 @@ library(reshape2)
 
 ################################################################################
 ## data import and manipulation
-energy_mix_percent_csv <<- read_csv("~/Desktop/Energy/energy_mix_percent_csv.csv")
+energy_mix_percent_csv <- read_csv("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/data/energy_mix_percent_csv.csv")
+
 years <- 2008:2017
 
 gas_plot<- as.numeric(energy_mix_percent_csv[2, 2:10])

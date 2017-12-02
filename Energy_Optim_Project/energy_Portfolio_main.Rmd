@@ -17,9 +17,7 @@ library(stargazer)
 ################################################################################
 ## Historical data plot for energy profile mix from 2008-2017
 
-source(paste('/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic', 
-             '_Optimization/Economic_Optimization/Energy_Optim/plot_', 
-             'historicalData_energyProfile_2008to2017.R', sep=""))
+source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/plot_historicalData_energyProfile_2008to2017.R")
 
 plot_historicalData_energyProfile_2008to2017()
 
@@ -29,9 +27,7 @@ plot_historicalData_energyProfile_2008to2017()
 
 ################################################################################
 
-source(paste('/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic', 
-             '_Optimization/Economic_Optimization/Energy_Optim/optim_model_', 
-             '2016_demand.R', sep=""))
+source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/optim_model_2016_demand.R")
 
 
 optim_model_2016_demand()

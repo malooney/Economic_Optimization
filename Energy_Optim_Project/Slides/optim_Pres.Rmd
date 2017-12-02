@@ -29,9 +29,9 @@ library(ggplot2)
 library(reshape2)
 library(stargazer)
 
-source(paste('/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic', 
-             '_Optimization/Economic_Optimization/Energy_Optim/plot_', 
-             'historicalData_energyProfile_2008to2017.R', sep=""))
+source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/plot_historicalData_energyProfile_2008to2017.R")
+
+energy_mix_percent_csv <- read_csv("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/data/energy_mix_percent_csv.csv")
 
 ```
 
@@ -75,13 +75,13 @@ source(paste('/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic',
 
 * Western Interconnection, ERCOT, Eastern Interconnection
 
-![](/Users/malooney/Desktop/Energy/GridMap.png)
+![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/GridMap.png)
 
 ## Demand Increse
 
 * ERCOT Generated Model for Peak Summer Demand
 
-![](/Users/malooney/Desktop/Energy/peakDemand.png)
+![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/peakDemand.png)
 
 ## Percent Source Data
 
@@ -106,8 +106,6 @@ plot_historicalData_energyProfile_2008to2017()
 
 ################################################################################
 ```
-
-
 
 
 ## Structural Change
@@ -153,7 +151,7 @@ plot_historicalData_energyProfile_2008to2017()
 
 * Lubbock will add 600 MW of demand load
 
-![](/Users/malooney/Desktop/Energy/lubbock-electric-service-areas-2015.pdf)
+![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/lubbock-electric-service-areas-2015.pdf)
 
 
 
@@ -161,7 +159,7 @@ plot_historicalData_energyProfile_2008to2017()
 
 * Texas summers are always hot!!! and getting hotter???
 
-![](/Users/malooney/Desktop/Energy/DaysOver.png)
+![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/daysOver.png)
 
 ## Optimization Model
 
