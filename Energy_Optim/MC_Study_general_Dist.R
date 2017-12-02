@@ -1,18 +1,27 @@
 
+################################################################################
+## Housekeeping
+library('MASS')
+library('reshape2')
+library('ggplot2')
 
-library(MASS)
+cat("\014") # clear workspace
+rm(list=ls()) # remove all variables from environment
+set.seed(12345) # set random seed for reproducibility
+################################################################################
 
-cat("\014")
-rm(list=ls())
-set.seed(12345)
-
+################################################################################
+## import LCOE functions
 source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim/LCOE_COAL.R")
 source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim/LCOE_NGCC.R")
 source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim/LCOE_NG_PEAKING.R")
 source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim/LCOE_NUCLEAR.R")
 source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim/LCOE_WIND.R")
 source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim/LCOE_SOLAR_PV.R")
+################################################################################
 
+################################################################################
+## create variance-covariance matrix framework
 mu <- c(0,0,0,0,0,0)
 Sigma <- matrix(c(1, 0.5, 0.5, 0.5, 0.5, 0.5,
                   0.5, 1, 0.5, 0.5, 0.5, 0.5,
@@ -37,26 +46,30 @@ LCOE_nuclear <- matrix(LCOE_nuclear+ e[,4], ncol=1)
 LCOE_wind <- matrix(LCOE_wind+ e[,5], ncol=1)
 LCOE_solar_pv <- matrix(LCOE_solar_pv+ e[,6], ncol=1)
 
-
-sqrt(var(LCOE_c))
-sqrt(var(LCOE_ngcc))
-sqrt(var(LCOE_ng_peaking))
-sqrt(var(LCOE_nuclear))
-sqrt(var(LCOE_wind))
-sqrt(var(LCOE_solar_pv))
 ################################################################################
 ## plot LCOE density for Coal, NGCC, NG_Peaking, Nuclear
+
 data_matrix <- data.frame(cbind(LCOE_c, LCOE_ngcc, LCOE_ng_peaking, 
                                 LCOE_nuclear, LCOE_wind, LCOE_solar_pv))
+
 colnames(data_matrix) <-  c("Coal", "NGCC", "NG_Peaking", "Nuclear", "Wind", 
                             "Solar_PV")
-data_matrix <- melt(data_matrix[,1:4])
-ggplot(data_matrix, aes(value, fill = variable, colour = variable))+ 
-  geom_density(alpha = 0.1)+ geom_rug(sides = "bl")
 
-summary(LCOE_c)
-summary(LCOE_ngcc)
-summary(LCOE_ng_peaking)
-summary(LCOE_nuclear)
-summary(LCOE_wind)
-summary(LCOE_solar_pv)
+data_matrix_1_4 <- melt(data_matrix[,1:4])
+
+ggplot(data_matrix_1_4, aes(value, fill = variable, colour = variable))+ 
+  geom_density(alpha = 0.1)+ 
+  geom_rug(sides = "bl", alpha = 0.1)+ 
+  theme_bw()+ 
+  xlab("LCOE ($/MWh)")
+################################################################################
+
+################################################################################
+data_matrix_5_6 <- melt(data_matrix[,5:6])
+
+ggplot(data_matrix_5_6, aes(value, fill = variable, colour = variable))+ 
+  geom_density(alpha = 0.1)+ 
+  geom_rug(sides = "bl", alpha = 0.1)+ 
+  theme_bw()+ 
+  xlab("LCOE ($/MWh)")
+################################################################################
