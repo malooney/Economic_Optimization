@@ -2,27 +2,29 @@
 
 library(triangle)
 
-LCOE_COAL <- function(terms=40, Cf=0.93, count=10000){
-  # Natural Gas Combustion Cycle
+LCOE_NUCLEAR <- function(i=0.10, Fc=0.65, terms=40, count=10000){
+  # Nuclear
   
   # Terms is the estimated lifetime of power plant
   # count is the number of Monte Carlo replications
+  # i is the interest rate on capital costs
+  # Fc is fuel cost ($/MMBtu) - convert in-situ
   
   ##############################################################################
-  i <- matrix(nrow=count, ncol=1)   # interest rate (%)
+  Cf <- matrix(nrow=count, ncol=1)  # Capacity Factor (%)
   C_c <- matrix(nrow=count, ncol=1) # Capital Cost ($/MWh)
   OMf <- matrix(nrow=count, ncol=1) # Fixed OM Costs ($/MW/Yr)
-  Fc <- matrix(nrow=count, ncol=1)  # Fuel Cost ($/MMBtu) - convert in-situ
   Q <- matrix(nrow=count, ncol=1)   # Heat Rate (Btu/KWh) - convert in-situ
   OMv <- matrix(nrow=count, ncol=1) # Variable OM Costs ($/MWh)
+
   ##############################################################################
-  ## model interest rate (%) from Triangular Distn.
+  ## model Capacity Factor (%) from Normal Distn.
   ii <- 1
-  while( is.na(i[length(i)]) ){
+  while( is.na(Cf[length(Cf)]) ){
     
-    temp <- rtriangle(1, 5, 12, 7)
-    if(temp >= 5 && temp <= 12){
-      i[ii,1] <- temp/100
+    temp <- rnorm(n=1, mean=87.5, sd=sqrt(1.25))
+    if(temp >= 85 && temp <= 90){
+      Cf[ii,1] <- temp/100
       ii <- ii+ 1 
     } else{}
   }
@@ -31,8 +33,8 @@ LCOE_COAL <- function(terms=40, Cf=0.93, count=10000){
   ii <- 1
   while( is.na(C_c[length(C_c)]) ){
     
-    temp <- rlnorm(n=1, meanlog = 8.182, sdlog = 0.407)
-    if(temp >= 1584 && temp <= 8071){
+    temp <- rlnorm(n=1, meanlog = 8.7, sdlog = 0.185)
+    if(temp >= 4146 && temp <= 8691){
       C_c[ii,1] <- temp/0.001
       ii <- ii+ 1 
     } else{}
@@ -42,20 +44,9 @@ LCOE_COAL <- function(terms=40, Cf=0.93, count=10000){
   ii <- 1
   while( is.na(OMf[length(OMf)]) ){
     
-    temp <- rnorm(n=1, mean=25.27, sd=sqrt(2.8)) 
-    if(temp >= 19.67 && temp <= 30.80){
-    OMf[ii,1] <- temp/0.001
-    ii <- ii+ 1 
-    } else{}
-  }
-  ##############################################################################
-  ## model Fuel Cost from Normal Distn.
-  ii <- 1
-  while( is.na(Fc[length(Fc)]) ){
-    
-    temp <- rnorm(n=1, mean=1.84, sd=sqrt(0.285)) 
-    if(temp >= 1.27 && temp <= 2.41){
-      Fc[ii,1] <- temp
+    temp <- rnorm(n=1, mean=87.69, sd=sqrt(16.75)) 
+    if(temp >= 54.19 && temp <= 121.19){
+      OMf[ii,1] <- temp/0.001
       ii <- ii+ 1 
     } else{}
   }
@@ -64,19 +55,19 @@ LCOE_COAL <- function(terms=40, Cf=0.93, count=10000){
   ii <- 1
   while( is.na(Q[length(Q)]) ){
     
-    temp <- rnorm(n=1, mean=10380, sd=sqrt(812.5))
-    if(temp >= 8755 && temp <= 12005){
+    temp <- rnorm(n=1, mean=10450, sd=sqrt(15))
+    if(temp >= 10420 && temp <= 10480){
       Q[ii,1] <- temp
       ii <- ii+ 1 
     } else{}
   }
   ##############################################################################
-  ## model Variable OM Costs from Normal Distn.
+  ## model Variable OM Costs from Triangle Distn.
   ii <- 1
   while( is.na(OMv[length(OMv)]) ){
     
-    temp <- rnorm(n=1, mean=4.15, sd=sqrt(0.975))
-    if(temp >= 2.2 && temp <= 6.1){
+    temp <- rtriangle(1, 0.42, 2.14, 1.28)
+    if(temp >= 0.42 && temp <= 2.14){
       OMv[ii,1] <- temp
       ii <- ii+ 1 
     } else{}
@@ -84,9 +75,9 @@ LCOE_COAL <- function(terms=40, Cf=0.93, count=10000){
   ##############################################################################
   P <- (C_c)*  ( i+ (i/ ( ((i+ 1)^terms)- 1) ) )
   
-  LCOE_c= ( (P+ OMf )/ (8760* Cf) )+ (Fc* Q* 0.001)+ OMv
+  LCOE_nuclear= ( (P+ OMf )/ (8760* Cf) )+ (Fc* Q* 0.001)+ OMv
   ##############################################################################
-  return(LCOE_c)
+  return(LCOE_nuclear)
   
 }
 
