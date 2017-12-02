@@ -1,0 +1,200 @@
+%% LyX 1.6.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{textcomp}
+\usepackage{relsize}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\def\labnb{0}
+\usepackage{hyperref} 
+\usepackage{ulem}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphics}
+\usepackage{lastpage}
+\usepackage{titling}
+\setlength{\droptitle}{-0.4in}
+
+\linespread{1.1}
+
+%%% HEADER
+\usepackage[head=32pt,top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{fancyhdr}
+\setlength{\headheight}{24pt}
+\pagestyle{fancy}
+\lhead{CE 191: CEE Systems Analysis \\ University of California, Berkeley}
+\rhead{Fall 2014 \\ Professor Scott Moura}
+\cfoot{Page \thepage\ of \pageref{LastPage}}
+
+\title{\Large Lab 2: Energy Portfolio Optimization}
+\author{Due: Friday 10/3 at 2:00pm}
+\date{}
+
+
+\renewcommand{\headrulewidth}{0.5pt}
+%\newcommand{\answer}[1]{\par\begin{center}\framebox{\parbox{5in}{{\bfseries \footnotesize Answer: }\textit{#1}}}\end{center}}
+\newcommand{\answer}[1]{}
+\newcommand{\inset}[2]{{\in\{{#1},\cdots,{#2}\} }}
+
+\newcounter{question}
+\setcounter{question}{1}
+\def\newquestion{\textbf{Question \arabic{section}.\arabic{question}\ \ }\stepcounter{question}}
+
+%\topmargin = -27 pt
+%\leftmargin = -0.5 in
+%\rightmargin= 1 in
+%\oddsidemargin =  -0.10 in \textheight = 8.5 in \textwidth = 6.5in
+
+\setlength{\parindent}{0mm}
+
+\addtolength{\parskip}{0.5\baselineskip}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Lab Overview}
+In this lab, you will learn to formulate a quadratic program to find a mix of energy supplies
+which minimizes the variability of the price of energy. Section \ref{sec:problem} provides a description of
+the full problem and the constraints. In Section \ref{sec:implementation}, you are asked to form the quadratic
+program, and implement it in MATLAB. Finally, in Section \ref{sec:addanalysis}, you will modify the quadratic
+program to analyze various scenarios. \textbf{Please remember to submit your MATLAB
+code (.m files in one ZIP file), and explain in the report how to run the code.}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Energy Portfolio Investment Problem}\label{sec:problem}
+
+The California Public Utilities Commission (CPUC) is charged with strategically planning its energy generation over
+the next several years to meet its growing energy demand. Currently, California generates
+199 \textit{megawatt hours} (MWh) from a combination of eight sources. This collection, or mix, of
+energy sources is known as an \textit{energy portfolio}. The contributions of eight sources to
+California's current portfolio is listed in Table \ref{tbl:energymix}.
+
+\begin{table}[h]
+\caption{Current sources of energy to California, and percent contribution to the current energy mix. Source: \url{http://energyalmanac.ca.gov/electricity/total_system_power.html}}
+\begin{center}
+\begin{tabular}{|c || c|c|c|c|c|c|c|c|}
+\hline
+{\bfseries Source} & Coal & Hydro & Natural Gas & Nuclear & Biomass & Geo & Solar & Wind \\ \hline
+{\bfseries 2012 energy mix (\%)} & 7.5 & 8.3 & 43.4 & 9.0 & 2.3 & 4.4 & 0.9 & 6.3  \\ \hline
+\end{tabular}
+\end{center}
+\label{tbl:energymix}
+\end{table}
+
+By the year 2020, California must generate a peak of 225 MWh to meet its growing demand for energy. The expected price in 2020 in dollars per megawatt hour (USD/MWh) is given in Table 2.
+
+\begin{table}[h]
+\caption{Expected price of energy in California in the year 2020. Adopted from: Adopted from \url{http://www.eia.gov/forecasts/aeo/pdf/electricity_generation.pdf}}
+\begin{center}
+\begin{tabular}{|c || c|c|c|c|c|c|c|c|}
+\hline
+{\bfseries Source} & Coal & Hydro & Natural Gas & Nuclear & Biomass & Geo & Solar & Wind \\ \hline
+{\bfseries Expected Price (\$/MWh)} & 100 & 90 & 130 & 108 & 111 & 90 & 144 & 87  \\ \hline
+\end{tabular}
+\end{center}
+\label{tbl:energyprice}
+\end{table}
+
+Through technology improvements, California can expand its resources as required to meet future demands. However, the price of each energy source contains uncertainty. Namely, variations in fuel costs, technology development, and future environmental regulations in 2020 impose uncertainty on the expected prices listed in Table \ref{tbl:energyprice}. Suppose the standard deviation $\sigma$ of the prices for each source is given in Table \ref{tbl:std}\footnote{For simplicity, we are ignoring correlations in prices between sources.}.
+
+\begin{table}[h]
+\caption{Standard deviation of energy source prices in 2020.}
+\begin{center}
+\begin{tabular}{|c || c|c|c|c|c|c|c|c|}
+\hline
+{\bfseries Source} & Coal & Hydro & Natural Gas & Nuclear & Biomass & Geo & Solar & Wind \\ \hline
+{\bfseries $\sigma$ (\$/MWh)} & 22 & 30 & 15 & 20 & 30 & 36 & 32 & 40  \\ \hline
+\end{tabular}
+\end{center}
+\label{tbl:std}
+\end{table}
+
+The variance in price of an uncertain good (for example 1 MWh of electricity) can be used as a measure of the \textit{risk} of that good. Recall that variance is
+\begin{equation*}
+	\textrm{var} = \sigma^{2}.
+\end{equation*}
+Portfolio theory assumes that for a given level of risk, planners prefer lower costs to higher ones. Conversely, for a given expected cost, planners prefer less risk to more risk. By combining various goods in a portfolio, it is possible to create a portfolio with lower risk than any of the goods individually. This is known as \textit{diversification}. The same concepts hold for stock market portfolios.
+
+To ensure competitive electricity rates, California must keep the expected cost of its energy portfolio under 100 USD/MWh. Therefore, California would like to determine an optimal energy portfolio. That is, determine the portfolio with the least risk for the given maximum expected cost.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implementation}\label{sec:implementation}
+
+\begin{enumerate}
+\item Formulate a quadratic program (QP) that California can use to minimize the risk of obtaining its energy, while satisfying the maximum expected energy cost constraint described above.
+\begin{enumerate}
+\item Define your mathematical notation in a table. Be precise and organized.
+\item Using this notation, formulate (i) the objective function and (ii) all the constraints.
+\item Encode this formulation in matrices \texttt{Q, R, A, b}, where the QP is formulated as $\min \frac{1}{2} x^{T} Q x + R^{T} x$ subject to $A x \leq b$. Write down matrices \texttt{Q, R, A, b} in your report.
+\item Is the Hessian $Q$ positive definite, negative definite, positive semi-definite, negative semi-definite, or indefinite? Note: the answer would not be trivial if we assumed correlations exist between the standard deviations of energy prices.
+\end{enumerate}
+
+\item Solve the QP that you have formulated using MATLAB's \texttt{quadprog} command (read the documentation). In your report, provide
+\begin{itemize}
+\item the value of the objective function, i.e. the risk,
+\item the value of the decision variables at the optimum,
+\item a qualitative description the optimal solution, including the active constraints.
+\end{itemize}
+
+\end{enumerate}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Additional Analysis}\label{sec:addanalysis}
+
+The following questions study modifications to the original problem. Each question is independent from the other ones, i.e. the changes are not cumulative. Where applicable, provide (i) the objective function value, and (ii) the optimal decision variable values.
+
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item A concerned and conservative member of the CPUC (yup, they went to Leland StanfUrd JR. University), who is not familiar with portfolio optimization suggests the safest plan is to apply the current energy portfolio mix (Table \ref{tbl:energymix}) to the year 2020. \textbf{Note:} The mix in Table 1 does not add to 100\%. In practice, California imports the remaining energy supply from out-of-state. Apply the same percentages to 2020 as 2012. The total energy supply will not add to 225 MWh. What is the expected risk and expected cost of this portfolio? Note this is a lower bound, because the remaining energy must be imported. Is there a safer (in the sense of less variance) portfolio with at least as small expected cost? Explain.
+
+\item The President of CPUC would like to know the minimal risk of each energy profile ranging in price 50 to 250 USD/MWh. Compute the minimal risk for each energy profile in this price range.
+
+\begin{enumerate}
+\item Summarize your results in a plot with max price [USD/MWh] on the $x-$axis and risk on the $y-$axis. Describe qualitatively the results. 
+\item Describe qualitatively the mix of the lowest risk energy portfolio in this price range. How much does it cost?
+\end{enumerate}
+
+\textbf{Remark:} Ideally, one wishes to both minimize expected cost and minimize risk. This is a multi-objective optimization problem. However, you'll find there exists a tradeoff between these two objectives. To assess multiple objectives we often create the plot above. This is known as \textit{Pareto optimization}\footnote{\url{http://en.wikipedia.org/wiki/Multi-objective_optimization}}.
+
+\item By the year 2020, California must generate 225 MWh to meet its growing demand for energy. New information suggests that, due to resource limitations and future governmental regulations, the maximum energy supply of non-renewables sources in 2020 is constrained. The energy supply limits are given in Table \ref{tbl:limits}. Moreover, California has mandated a 33\% \textit{renewable portfolio standard} by 2020\footnote{\url{http://www.cpuc.ca.gov/PUC/energy/Renewables/index.htm}}, which includes wind, solar, biomass, and geothermal. Modify the original QP to include these additional constraints.
+
+\begin{enumerate}
+\item Formulate the appropriate constraints imposed by these limits, using the notation of Question 1. Describe any additional notation introduced.
+\item Solve the original QP with these additional constraints. How does the new solution compare with your results from Question 1? Which constraints are active?
+\end{enumerate}
+
+
+\begin{table}[h]
+\caption{Energy supply limits in 2020.}
+\begin{center}
+\begin{tabular}{|c || c|c|c|c|c|c|c|c|}
+\hline
+{\bfseries Source} & Coal & Hydro & Natural Gas & Nuclear & Biomass & Geo & Solar & Wind \\ \hline
+{\bfseries Limit (MWh)} & 40 & 50 & 150 & 35 & 10 & 15 & 200 & 50  \\ \hline
+\end{tabular}
+\end{center}
+\label{tbl:limits}
+\end{table}
+
+\end{enumerate}
+
+%%%%%%%%%%%%%
+\section*{Deliverables}
+Submit the following on bSpace. Zip your code. Be sure that the function files are named exactly as specified (including spelling and case), and make sure the function declaration is exactly as specified.
+
+\texttt{LASTNAME{\textunderscore}FIRSTNAME{\textunderscore}LAB2.PDF}\\
+\texttt{LASTNAME{\textunderscore}FIRSTNAME{\textunderscore}LAB2.ZIP} which contains your respective Matlab files.
+
+\end{document}

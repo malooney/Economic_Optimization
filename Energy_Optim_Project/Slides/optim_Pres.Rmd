@@ -1,0 +1,223 @@
+---
+title: "ERCOT Energy Portfolio Optimization"
+author: "Matthew Aaron Looney"
+date: "10/30/2017"
+output:
+  beamer_presentation:
+    fig_caption: yes
+    fonttheme: structurebold
+    theme: Boadilla
+    toc: no
+  ioslides_presentation: default
+  slidy_presentation: default
+---
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+cat("\014")
+rm(list=ls())
+set.seed(12345)
+options(scipen=999)
+
+library(quadprog)
+library(dygraphs)
+library(readr)
+library(ggthemes)
+library(ggplot2)
+library(reshape2)
+library(stargazer)
+
+source(paste('/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic', 
+             '_Optimization/Economic_Optimization/Energy_Optim/plot_', 
+             'historicalData_energyProfile_2008to2017.R', sep=""))
+
+```
+
+## Goal of this Research
+
+###
+* Develop a quadratic program to determine an optimal mix (portfolio) of energy supplies which minimize the variability of the price of energy in the Texas electricity market.  
+
+* I will use the Efficient Frontier concept, a "modern" portfolio theory introduced by Harry Markowitz in 1952.  
+
+* When used in Electric Power System optimization Merlin and Back (1975), note that we are interested in both minimizing expected cost and minimizing risk. This is a multi-objective optimization problem and there is always a trade-off between these two objectives.
+
+## Background
+
+###
+* My study is focused exclusively on the Texas Electric Grid.
+
+* The Texas Grid is managed by The Electric Reliability Council of Texas (ERCOT).
+
+* ERCOT is a membership-based 501(c)(4) nonprofit corporation, governed by a board of directors and subject to oversight by the Public Utility Commission of Texas and the Texas Legislature.
+
+* (ERCOT) manages the flow of electric power to 24 million Texas customers -- representing about 90 percent of the state’s electric load.
+
+* ERCOT schedules power on an electric grid that connects more than 46,500 miles of transmission lines and 570+ generation units.
+
+## More Background
+
+### ERCOT is currently undergoing rapid change in several key areas.
+
+  * Demand Increase
+    
+  * Structural Change
+    
+  * Changes in Regulatory environment
+    
+  * Change in ERCOT’s Service Territory
+  
+  * Weather Uncertainty
+
+## United States Power Grid
+
+* Western Interconnection, ERCOT, Eastern Interconnection
+
+![](/Users/malooney/Desktop/Energy/GridMap.png)
+
+## Demand Increse
+
+* ERCOT Generated Model for Peak Summer Demand
+
+![](/Users/malooney/Desktop/Energy/peakDemand.png)
+
+## Percent Source Data
+
+```{r echo=FALSE, message=FALSE, results='asis', cache=F}
+stargazer(energy_mix_percent_csv[1:6,], header=F, type="latex", summary = F, font.size = "footnotesize", notes= c("Gas CC - Combined Cycle Natural Gas", "2017 data is incomplete."), notes.align= "r", flip = T, float = T, float.env = "table", title="Historical Energy Source Mix in Percentage", median = F, colnames=F)
+```
+
+## Percent Source Data
+
+```{r echo=FALSE, message=FALSE, results='asis', cache=F}
+stargazer(energy_mix_percent_csv[c(7,8,9,10,13),], header=F, type="latex", summary = F, font.size = "footnotesize", notes= c("Other - includes petroleum coke, landfill gas, biomass solids,", "biomas gases, and any unknown fuel.", "A positive value in the 'Net DC/BLT' row indicates import", "of power, negative indicates export.", "2017 data is incomplete."), notes.align= "r", flip = T, float = T, float.env = "table", title="Historical Energy Source Mix in Percentage", median = F, colnames=F)
+```
+
+
+## Percent Source Plot
+
+```{r echo=FALSE, message=FALSE, results='asis', cache=F}
+################################################################################
+## Historical data plot for energy profile mix from 2008-2017
+
+plot_historicalData_energyProfile_2008to2017()
+
+################################################################################
+```
+
+
+
+
+## Structural Change
+
+### Energy source portfolio changes 
+
+* More Wind and Solar sources online
+
+* More Natural Gas integration
+
+* Coal plant retirement schedules
+
+### Demand Shifters
+
+* Electric vehicles have less than 1% market share today
+
+* The future will look very different
+
+* The electricity demands from electric vehicles on the power grid will be non-trivial
+
+* Turns out the future is hard to predict, BUT future demands need to be provisioned for today.
+
+
+##Changes in Regulatory Environment
+
+### Electricity Market Reform
+
+* Move away from vertically integrated electricity markets
+
+* Move toward Investor Owned Utilities (IOU's)
+
+* Development of Spot Market and Day Ahead Transaction Markets
+
+* More sophisticated Cost Plus Pricing Models
+
+### Changes in Environmental Regulations
+
+* Move toward renewable energy sources
+
+* Move away from Nuclear
+
+##Change in ERCOT’s Service Territory
+
+* Lubbock will add 600 MW of demand load
+
+![](/Users/malooney/Desktop/Energy/lubbock-electric-service-areas-2015.pdf)
+
+
+
+## Weather Uncertainty
+
+* Texas summers are always hot!!! and getting hotter???
+
+![](/Users/malooney/Desktop/Energy/DaysOver.png)
+
+## Optimization Model
+
+### Quadratic Programing Model
+
+\[\mathop {\min }\limits_{{x_i}} \frac{1}{2}x'Hx + f'{\text{ subject to }}\left\{ \begin{gathered}
+  Ax \leqslant b, \hfill \\
+  Aeqx = beq, \hfill \\
+  x \geqslant 0 \hfill \\ 
+\end{gathered}  \right.\]
+
+## Optimization Model
+
+### Data
+
+* Expected average price of source energy in 20XX
+
+* Data from ERCOT Price Projection Model
+
+|    Source   | Expected Price ($/MWh) |
+|:-----------:|:----------------------:|
+|     Coal    |        $E(p_1)$        |
+|    Hydro    |        $E(p_2)$        |
+| Natural Gas |        $E(p_3)$        |
+|   Nuclear   |        $E(p_4)$        |
+|   Biomass   |        $E(p_5)$        |
+|     Geo     |        $E(p_6)$        |
+|    Solar    |        $E(p_7)$        |
+|     Wind    |        $E(p_8)$        |
+
+## Optimization Model
+
+### Data
+
+* Standard deviation of energy source prices in 20XX
+
+|    Source   | $\sigma$ ($/MWh) |
+|:-----------:|:----------------:|
+|     Coal    |    $\sigma_1$    |
+|    Hydro    |    $\sigma_2$    |
+| Natural Gas |    $\sigma_3$    |
+|   Nuclear   |    $\sigma_4$    |
+|   Biomass   |    $\sigma_5$    |
+|     Geo     |    $\sigma_6$    |
+|    Solar    |    $\sigma_7$    |
+|     Wind    |    $\sigma_8$    |
+
+## Optimization Model
+
+### Constraints
+
+* Meet projected demand, ie. 2026 Energy Forecast of 417 TWh
+
+* Keep Texas electricity rates competitive, therefore, ensure expected cost of energy portfolio under XXX $/MWh
+
+### Gaol
+
+* Formulate a quadratic program to minimize the risk of obtaining energy, while satisfying the maximum expected energy cost constraint described above.
+
