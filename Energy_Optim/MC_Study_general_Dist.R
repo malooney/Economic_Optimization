@@ -44,16 +44,15 @@ sqrt(var(LCOE_ng_peaking))
 sqrt(var(LCOE_nuclear))
 sqrt(var(LCOE_wind))
 sqrt(var(LCOE_solar_pv))
-
-data_matrix <- data.frame(cbind(LCOE_c, LCOE_ngcc, LCOE_ng_peaking, LCOE_nuclear, LCOE_wind, LCOE_solar_pv))
-
-plot(density(LCOE_c))
-plot(density(LCOE_ngcc))
-plot(density(LCOE_ng_peaking))
-plot(density(LCOE_nuclear))
-plot(density(LCOE_wind))
-plot(density(LCOE_solar_pv))
-hist(LCOE_solar_pv)
+################################################################################
+## plot LCOE density for Coal, NGCC, NG_Peaking, Nuclear
+data_matrix <- data.frame(cbind(LCOE_c, LCOE_ngcc, LCOE_ng_peaking, 
+                                LCOE_nuclear, LCOE_wind, LCOE_solar_pv))
+colnames(data_matrix) <-  c("Coal", "NGCC", "NG_Peaking", "Nuclear", "Wind", 
+                            "Solar_PV")
+data_matrix <- melt(data_matrix[,1:4])
+ggplot(data_matrix, aes(value, fill = variable, colour = variable))+ 
+  geom_density(alpha = 0.1)+ geom_rug(sides = "bl")
 
 summary(LCOE_c)
 summary(LCOE_ngcc)
