@@ -253,3 +253,8 @@ density_plot2
 
 ################################################################################
 ```
+
+## Results
+
+![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/optim_table_results.png)
+

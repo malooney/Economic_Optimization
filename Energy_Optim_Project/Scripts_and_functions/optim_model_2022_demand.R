@@ -10,7 +10,7 @@ optim_model_2022_demand <- function(){
 ## Housekeeping
   library('quadprog')
   library('MASS')
-  set.seed(12345)
+  set.seed(123)
   
 ###############################################################################
   
