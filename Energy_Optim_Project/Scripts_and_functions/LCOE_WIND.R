@@ -19,7 +19,7 @@ LCOE_WIND <- function(i=0.10, terms=20, count=10000){
   ii <- 1
   while( is.na(Cf[length(Cf)]) ){
     
-    temp <- rnorm(n=1, mean=36.75, sd=sqrt(7))
+    temp <- rnorm(n=1, mean=41, sd=sqrt(7))
     if(temp >= 22.75 && temp <= 50.75){
       Cf[ii,1] <- temp/100
       ii <- ii+ 1 

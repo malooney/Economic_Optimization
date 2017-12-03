@@ -16,6 +16,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+
 cat("\014")
 rm(list=ls())
 set.seed(12345)
@@ -31,7 +32,11 @@ library(stargazer)
 
 source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/plot_historicalData_energyProfile_2008to2017.R")
 
+source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/MC_Study_LCOE.R")
+
 energy_mix_percent_csv <- read_csv("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/data/energy_mix_percent_csv.csv")
+
+MC_Study_LCOE()
 
 ```
 
@@ -198,20 +203,18 @@ plot_historicalData_energyProfile_2008to2017()
 
 |    Source   | $\sigma$ ($/MWh) |
 |:-----------:|:----------------:|
-|     Coal    |    $\sigma_1$    |
-|    Hydro    |    $\sigma_2$    |
-| Natural Gas |    $\sigma_3$    |
-|   Nuclear   |    $\sigma_4$    |
-|   Biomass   |    $\sigma_5$    |
-|     Geo     |    $\sigma_6$    |
-|    Solar    |    $\sigma_7$    |
-|     Wind    |    $\sigma_8$    |
+|     Coal    |    $\sigma_{1}$    |
+| Natural Gas Combustion Cycle|    $\sigma_{2}$    |
+| Natural Gas Peaking|    $\sigma_{3}$    |
+|   Nuclear   |    $\sigma_{4}$    |
+|    Solar PV    |    $\sigma_{5}$    |
+|     Wind    |    $\sigma_{6}$    |
 
 ## Optimization Model
 
 ### Constraints
 
-* Meet projected demand, ie. 2026 Energy Forecast of 417 TWh
+* Meet projected demand, ie. 2022 Energy Forecast of 417 TWh
 
 * Keep Texas electricity rates competitive, therefore, ensure expected cost of energy portfolio under XXX $/MWh
 
@@ -219,3 +222,34 @@ plot_historicalData_energyProfile_2008to2017()
 
 * Formulate a quadratic program to minimize the risk of obtaining energy, while satisfying the maximum expected energy cost constraint described above.
 
+## Summary Statistics from Monte Carlo Study
+
+```{r echo=FALSE, message=FALSE, results='asis', cache=F}
+## Summary Statistics from Monte Carlo Study
+
+stargazer(LCOE_MC_data_matrix, header=F, type="latex", summary = T, font.size = "footnotesize", notes= c(""), notes.align= "r", flip = F, float = T, float.env = "table", title="Summary Statistics", median = F, colnames=T)
+
+```
+
+
+## Density Plots from Monte Carlo Study
+
+```{r echo=FALSE, message=FALSE, results='asis', cache=F}
+################################################################################
+## Density Plots from Monte Carlo Study
+
+density_plot1
+
+################################################################################
+```
+
+## Density Plots from Monte Carlo Study
+
+```{r echo=FALSE, message=FALSE, results='asis', cache=F}
+################################################################################
+## Density Plots from Monte Carlo Study
+
+density_plot2
+
+################################################################################
+```

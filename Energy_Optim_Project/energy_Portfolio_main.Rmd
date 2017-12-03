@@ -25,13 +25,11 @@ plot_historicalData_energyProfile_2008to2017()
 
 ################################################################################
 
-################################################################################
-
 source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/optim_model_2016_demand.R")
-
 
 optim_model_2016_demand()
 
+################################################################################
 
 ```
 

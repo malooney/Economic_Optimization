@@ -47,6 +47,10 @@ qp.soln <- data.frame(id=1:length(c), source= -qp$solution)
 
 rownames(qp.soln) <- c("coal", "hydro", "natural_gas", "nuclear", "biomass", "solar", "wind")
 
+prcnt <- data.frame(percent=100*qp.soln[,2]/sum(qp.soln[,2]))
+
+qp.soln <- cbind(qp.soln, prcnt)
+
 plot(qp.soln[,2], type="h", ylab="Power provisioned from resource i [TWh]")
 
 ################################################################################
