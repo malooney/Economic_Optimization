@@ -15,7 +15,7 @@ shinyUI(fluidPage(
         sliderInput("cost",
                    "Maximum expected cost [million USD/TWh]:",
                     min = 0,
-                    max = 150,
+                    max = 200,
                     value = 100),
         sliderInput("demand",
                     "ERCOT Demand in 2016 [TWh]:",
@@ -26,11 +26,11 @@ shinyUI(fluidPage(
      
     mainPanel(
       tabsetPanel(
-        tabPanel("Historical - Source Mix: Plot", plotOutput("HistPlot"), DT::dataTableOutput('tbl1')),
+        tabPanel("Historical - Source Mix: Plot", plotOutput("HistPlot", height = "600px"), DT::dataTableOutput('tbl1')),
         
-        tabPanel("Model - Source Mix: Plot", plotOutput("distPlot"), DT::dataTableOutput('tbl')), 
+        tabPanel("Model - Source Mix: Plot", plotOutput("distPlot", height = "600px"), DT::dataTableOutput('tbl')), 
         
-        tabPanel("Model - Risk: Plot", dygraphOutput("gatePlot"))
+        tabPanel("Model - Risk: Plot", dygraphOutput("gatePlot", height = "800px"))
       )
     ))
 )
