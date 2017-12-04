@@ -242,7 +242,7 @@ shinyServer(function(input, output) {
       
       dygraph(data,
               main= "Portfolio Risk / variance Plot",
-              xlab= "Max Expected Energy Cost in 2020 [million USD/TWh]",
+              xlab= "Max Expected Energy Cost in 2022 [million USD/TWh]",
               ylab= "Risk (Variance) [Billion USD^2]") %>%
         dyRangeSelector(height= 20) %>%
         dySeries("risk", label= "Risk") %>%

@@ -39,6 +39,7 @@ source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimizat
 energy_mix_percent_csv <- read_csv("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/data/energy_mix_percent_csv.csv")
 
 MC_Study_LCOE()
+
 optim_model_2022_demand() #histplot and riskPlot
 
 ```
@@ -47,7 +48,7 @@ optim_model_2022_demand() #histplot and riskPlot
 
 ###
 
-* Develop a quadratic program to determine an optimal mix (portfolio) of energy supplies which minimize the variability of the price of energy in the Texas electricity market.
+* Develop a Quadratic Program to determine an optimal mix (portfolio) of energy supplies which minimize the variability of the price of energy in the Texas electricity market.
 
 * I will use the "Modern Portfolio Theory", introduced by Harry Markowitz in 1952.
 
@@ -389,7 +390,11 @@ p1
 
 ### Directions for Future Research
 
-* Bootstrap the variance-covariance matrix.
+* **Bootstrap the variance-covariance matrix.**
+
+* **Include Carbon Costs in the LCOE calculations**
+
+* **Enrich the LCOE calculations with regional specific data.**
 
 * Enrich the LCOE calculations with additional parameters and better data.
 
