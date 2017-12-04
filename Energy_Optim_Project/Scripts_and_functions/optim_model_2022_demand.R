@@ -96,9 +96,7 @@ optim_model_2022_demand <- function(){
   a8 <- matrix(c(0, 0, 0, 0, 0, 1), nrow=1) #PV Solar <= 7%
   a9 <- matrix(c(0, 0, 0, 0, 1, 0), nrow=1) #wind <= 25%
   a10 <- matrix(c(0, 0, -1, 0, 0, 0), nrow=1) # 10% <= ng gas peaking
-  
 
-  
 # constraints A=LHS, b=RHS
   A <- rbind(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
   b <- c(d, 0, 0, 0, 0, 0, 0, 0, d*.6, -d*0.9, -d*0.9, -d*0.9, -d*0.07, -d*0.25, d*.1)
