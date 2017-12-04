@@ -34,9 +34,12 @@ source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimizat
 
 source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/MC_Study_LCOE.R")
 
+source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/optim_model_2022_demand.R")
+
 energy_mix_percent_csv <- read_csv("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/data/energy_mix_percent_csv.csv")
 
 MC_Study_LCOE()
+optim_model_2022_demand() #histplot and riskPlot
 
 ```
 
@@ -45,24 +48,27 @@ MC_Study_LCOE()
 ###
 * Develop a quadratic program to determine an optimal mix (portfolio) of energy supplies which minimize the variability of the price of energy in the Texas electricity market.  
 
-* I will use the Efficient Frontier concept, a "modern" portfolio theory introduced by Harry Markowitz in 1952.  
-
-* When used in Electric Power System optimization Merlin and Back (1975), note that we are interested in both minimizing expected cost and minimizing risk. This is a multi-objective optimization problem and there is always a trade-off between these two objectives.
+* I will use the "Modern Portfolio Theory", introduced by Harry Markowitz in 1952.  
+* When used in Electric Power System optimization modeling, Merlin and Back (1975) note that we are interested in both minimizing expected cost and minimizing risk. This is a multi-objective optimization problem and there is always a trade-off between these two objectives.
 
 ## Background
 
 ###
-* My study is focused exclusively on the Texas Electric Grid.
+* **My study is focused exclusively on the Texas Electric Grid.**
 
 * The Texas Grid is managed by The Electric Reliability Council of Texas (ERCOT).
 
 * ERCOT is a membership-based 501(c)(4) nonprofit corporation, governed by a board of directors and subject to oversight by the Public Utility Commission of Texas and the Texas Legislature.
 
-* (ERCOT) manages the flow of electric power to 24 million Texas customers -- representing about 90 percent of the state’s electric load.
+* **(ERCOT) manages the flow of electric power to 24 million Texas customers -- representing about 90 percent of the state’s electric load.**
 
 * ERCOT schedules power on an electric grid that connects more than 46,500 miles of transmission lines and 570+ generation units.
 
-## More Background
+## Current ERCOT Service Area
+
+![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/current_ERCOT_Area.png)
+
+## Changing Texas Electric Market
 
 ### ERCOT is currently undergoing rapid change in several key areas.
 
@@ -82,26 +88,20 @@ MC_Study_LCOE()
 
 ![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/GridMap.png)
 
-## Demand Increse
-
-* ERCOT Generated Model for Peak Summer Demand
-
-![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/peakDemand.png)
-
-## Percent Source Data
+## Demand Increase - Historical Source Data (%)
 
 ```{r echo=FALSE, message=FALSE, results='asis', cache=F}
 stargazer(energy_mix_percent_csv[1:6,], header=F, type="latex", summary = F, font.size = "footnotesize", notes= c("Gas CC - Combined Cycle Natural Gas", "2017 data is incomplete."), notes.align= "r", flip = T, float = T, float.env = "table", title="Historical Energy Source Mix in Percentage", median = F, colnames=F)
 ```
 
-## Percent Source Data
+## Demand Increase - Historical Source Data (%)
 
 ```{r echo=FALSE, message=FALSE, results='asis', cache=F}
 stargazer(energy_mix_percent_csv[c(7,8,9,10,13),], header=F, type="latex", summary = F, font.size = "footnotesize", notes= c("Other - includes petroleum coke, landfill gas, biomass solids,", "biomas gases, and any unknown fuel.", "A positive value in the 'Net DC/BLT' row indicates import", "of power, negative indicates export.", "2017 data is incomplete."), notes.align= "r", flip = T, float = T, float.env = "table", title="Historical Energy Source Mix in Percentage", median = F, colnames=F)
 ```
 
 
-## Percent Source Plot
+## Demand Increase - Historical Source Data Plot
 
 ```{r echo=FALSE, message=FALSE, results='asis', cache=F}
 ################################################################################
@@ -112,6 +112,11 @@ plot_historicalData_energyProfile_2008to2017()
 ################################################################################
 ```
 
+## Demand Increse - Forcasted
+
+* ERCOT Generated Model for Peak Summer Demand
+
+![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/peakDemand.png)
 
 ## Structural Change
 
@@ -150,7 +155,9 @@ plot_historicalData_energyProfile_2008to2017()
 
 * Move toward renewable energy sources
 
-* Move away from Nuclear
+* Move away from Nuclear and Coal
+
+* Carbon Price Modeling
 
 ##Change in ERCOT’s Service Territory
 
@@ -162,67 +169,149 @@ plot_historicalData_energyProfile_2008to2017()
 
 ## Weather Uncertainty
 
+###
+
 * Texas summers are always hot!!! and getting hotter???
 
 ![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/daysOver.png)
 
 ## Optimization Model
 
-### Quadratic Programing Model
+### Quadratic Programing Model - General Formula
 
-\[\mathop {\min }\limits_{{x_i}} \frac{1}{2}x'Hx + f'{\text{ subject to }}\left\{ \begin{gathered}
-  Ax \leqslant b, \hfill \\
+\[\mathop {\min }\limits_{{x_i}} \frac{1}{2}x_i'Hx_i + f'{\text{ subject to }}\left\{ \begin{gathered}
+  Ax_i \leqslant b, \hfill \\
   Aeqx = beq, \hfill \\
-  x \geqslant 0 \hfill \\ 
+  x_i \geqslant 0 \hfill \\ 
 \end{gathered}  \right.\]
 
+## Strategy
+
+### How have energy portfolios been modeled in the past?
+
+* Measuring costs is the first step to the understanding of electricity mix.
+
+* A common and useful measure to compare different electricity generating technologies is the Levelized Cost of Electricity (LCOE).
+
+* LCOE calculations are generally computed as point source estimates of costs. (U.S. Energy Information Admin. (EIA), DOE, National Renewable Energy Lab, LAZARD, Sandia National Lab)
+
+* The calculation of the LCOE is based on the equivalence of the present value of the sum of discounted revenues and the present value of the sum of discounted costs (see for instance, Marrero and Ramos-Real, 2010).
+
+## Strategy
+
+### Levelized Cost of Electricity Formula
+
+\[\begin{gathered}
+  LCOE = \frac{{P + O{M_F}}}{{8760 \cdot {C_f}}} + {F_c} \cdot Q + O{M_v} \hfill \\
+  P = {C_c}\left[ {i + \frac{i}{{{{(i + 1)}^n} - 1}}} \right] \hfill \\ 
+\end{gathered} \]
+
+$P$ is the yearly payment on capital costs.  
+$OM_F$ is the fixed costs.  
+8760 is the number of hours in a year.  
+$C_f$ is the capacity factor.  
+$F_c$ is the fuel cost.  
+$Q$ is the heat rate of the plant.  
+$OM_v$ is the variable costs.  
+$C_c$ is the capital cost of building the generation plant or station.  
+$i$ is the interest rate.  
+$n$ is the number of payments, assumed to be the lifetime of the plant.
+
+## Strategy
+
+### My Approach in this Study
+
+1.  Calculate LCOE by Monte Carlo Simulation.
+    * Draw LCOE Cost Paramaters from various statistical distributions.
+    * Distributional choice is determined by historical data on costs across energy sources.
+    * Collate point source data from EIA and LAZARD LCOE reports. Use the data to establish boundary conditions for the choosen distributions.
+    
+    ![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/LCOE_MC_Dist_Table.png)
+
+
+## Strategy
+
+### My Approach in this Study
+
+2.  Take random draws from the Multivariate Normal Distribution to construct a correlated error term across all energy source LCOE's.
+    * Since most studies focus on point source estimates, little work has been done to evaluate the covariance structure between energy sources. Some correlation is assumed to exist within costs and interest rates. Using the MVN distribution
+ allows us to model the unknown correlations across energy sources.
+    
+\[ \varepsilon  \sim {\mathcal{N}_p}(\mu ,\Sigma ) \]
+
+\[LCO{E_{{\varepsilon _i}}} = LCO{E_i} + {\varepsilon _i}\]
+
+## Strategy
+
+### My Approach in this Study
+
+3.  Use the Expected $LCO{E_{{\varepsilon _i}}}$ cost estimates from the Monte Carlo study along with the uncovered variance-covariance matrix to minimize the risk, (using a Quadratic Programming Model) of obtaining energy while satisfying the defined constraints.
+
 ## Optimization Model
 
-### Data
+### Model and Notation
 
-* Expected average price of source energy in 20XX
+\[\min \sum\limits_{i = 1}^6 {{{({\Sigma }{x_i})}^2}} {\text{     subject to:  constraints}}\]
 
-* Data from ERCOT Price Projection Model
-
-|    Source   | Expected Price ($/MWh) |
-|:-----------:|:----------------------:|
-|     Coal    |        $E(p_1)$        |
-|    Hydro    |        $E(p_2)$        |
-| Natural Gas |        $E(p_3)$        |
-|   Nuclear   |        $E(p_4)$        |
-|   Biomass   |        $E(p_5)$        |
-|     Geo     |        $E(p_6)$        |
-|    Solar    |        $E(p_7)$        |
-|     Wind    |        $E(p_8)$        |
+![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/variable_description.png)
 
 ## Optimization Model
 
-### Data
+### General Constraints
 
-* Standard deviation of energy source prices in 20XX
+* 2022 Energy Demand
 
-|    Source   | $\sigma$ ($/MWh) |
-|:-----------:|:----------------:|
-|     Coal    |    $\sigma_{1}$    |
-| Natural Gas Combustion Cycle|    $\sigma_{2}$    |
-| Natural Gas Peaking|    $\sigma_{3}$    |
-|   Nuclear   |    $\sigma_{4}$    |
-|    Solar PV    |    $\sigma_{5}$    |
-|     Wind    |    $\sigma_{6}$    |
+\[\sum\limits_{i = 1}^6 {{x_i}}  \geqslant d\]
+
+* Maximum Expected Cost
+
+\[\frac{{\sum\limits_{i = 1}^6 {{c_i}{x_i}} }}{{\sum\limits_{i = 1}^6 {{x_i}} }} \leqslant {c_{max}}\]
+
+* Non-negativity
+
+\[{x_i} \geqslant 0,{\text{     }}\forall i{\text{     }}\]
 
 ## Optimization Model
 
-### Constraints
+### Technical Constraints
 
-* Meet projected demand, ie. 2022 Energy Forecast of 417 TWh
+* from Marrero, et al (2015); Awerbuch and Berger (2003); Awerbuch and Yang (2007); Marrero and Ramos-Real (2010)
 
-* Keep Texas electricity rates competitive, therefore, ensure expected cost of energy portfolio under XXX $/MWh
+\[\begin{gathered}
+  Sola{r_{PV}} \leqslant 7\%  \hfill \\
+  Wind \leqslant 25\%  \hfill \\
+  N{G_{Peaking}} \geqslant 10\%  \hfill \\ 
+\end{gathered} \]
 
-### Gaol
+\[\begin{gathered}
+  \left. \begin{gathered}
+  {x_1} = N{G_{cc}} \leqslant 90\%  \hfill \\
+  {x_2} = Coal \leqslant 90\%  \hfill \\
+  {x_3} = Nuclear \leqslant 90\%  \hfill \\ 
+\end{gathered}  \right\}UpperLimit \hfill \\
+  \left. {\sum\limits_{i = 1}^3 {{x_i}}  \geqslant 60\% } \right\}LowerLimit \hfill \\ 
+\end{gathered} \]
 
-* Formulate a quadratic program to minimize the risk of obtaining energy, while satisfying the maximum expected energy cost constraint described above.
+## Optimization Model
 
-## Summary Statistics from Monte Carlo Study
+### Practical Implementation in R
+
+* Using "quadprog" algorithm
+  * the algorithm expects the following format
+
+\[\min \left( {\frac{1}{2}b'Db - d'b} \right){\text{  s.t.  }}A'b \geqslant b\]
+
+![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/bVec_dVec.png)
+
+## Optimization Model
+
+### Practical Implementation in R
+
+![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/Amat_Dmat.png)
+
+## Results
+
+### Summary Statistics from Monte Carlo Study
 
 ```{r echo=FALSE, message=FALSE, results='asis', cache=F}
 ## Summary Statistics from Monte Carlo Study
@@ -231,8 +320,9 @@ stargazer(LCOE_MC_data_matrix, header=F, type="latex", summary = T, font.size = 
 
 ```
 
+## Results
 
-## Density Plots from Monte Carlo Study
+### Density Plots from Monte Carlo Study
 
 ```{r echo=FALSE, message=FALSE, results='asis', cache=F}
 ################################################################################
@@ -243,7 +333,9 @@ density_plot1
 ################################################################################
 ```
 
-## Density Plots from Monte Carlo Study
+## Results
+
+### Density Plots from Monte Carlo Study
 
 ```{r echo=FALSE, message=FALSE, results='asis', cache=F}
 ################################################################################
@@ -256,5 +348,35 @@ density_plot2
 
 ## Results
 
+### Output from Quadratic Program
+
 ![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/optim_table_results.png)
+
+## Results
+
+### Histogram Plot of Quadratic Program Optimization
+
+```{r echo=FALSE, message=FALSE, results='asis', cache=F}
+################################################################################
+## Histogram Plot
+
+plot.new() 
+p
+
+################################################################################
+```
+
+## Results
+
+### Risk Plot of Quadratic Program Optimization
+
+```{r echo=FALSE, message=FALSE, results='asis', cache=F}
+################################################################################
+## Risk Plot
+
+plot.new() 
+p1
+
+################################################################################
+```
 

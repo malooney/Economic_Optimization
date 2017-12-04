@@ -113,8 +113,12 @@ optim_model_2022_demand <- function(){
   
   qp.soln <- cbind(qp.soln, prcnt)
   
-  plot(qp.soln[,2], type="h", ylab="Power provisioned from resource i [TWh]")
-  
+plot(qp.soln[,2], type="h", ylab="Power provisioned from resource i [TWh]")
+
+p <<- recordPlot()
+#plot.new() ## clean up device
+#p # redraw
+
 ################################################################################
   
 ################################################################################
@@ -144,6 +148,8 @@ optim_model_2022_demand <- function(){
     i <- i+1
   }
   
-  plot(x=cmax_range, y=qp.value[,1]/1000000, type="l", xlab="Max Expected Energy Cost in 2022 [million USD/TWh]", ylab="Variance / Risk [Billion USD^2]")
+plot(x=cmax_range, y=qp.value[,1]/1000000, type="l", xlab="Max Expected Energy Cost in 2022 [million USD/TWh]", ylab="Risk (Variance) [Billion USD^2]")
   
+p1 <<- recordPlot()
+
 }
