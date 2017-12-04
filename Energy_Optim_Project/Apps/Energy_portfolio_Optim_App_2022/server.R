@@ -2,7 +2,7 @@
 
 cat("\014")
 rm(list=ls())
-set.seed(123)
+#set.seed(123)
 options(scipen=999)
 
 library(readr)
@@ -14,6 +14,77 @@ library(ggplot2)
 library(reshape2)
 
 shinyServer(function(input, output) {
+  
+  
+  ###############################################################################
+  ## Housekeeping
+  library('quadprog')
+  library('MASS')
+  set.seed(123)
+  
+  ###############################################################################
+  
+  ################################################################################
+  ## import LCOE functions
+  source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_COAL.R")
+  
+  source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_NGCC.R")
+  
+  source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_NG_PEAKING.R")
+  
+  source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_NUCLEAR.R")
+  
+  source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_WIND.R")
+  
+  source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_SOLAR_PV.R")
+  ################################################################################
+  
+  ################################################################################
+  ## create variance-covariance matrix framework
+  mu <- c(0,0,0,0,0,0)
+  Sigma <- matrix(c(1, 0.5, 0.5, 0.5, 0.5, 0.5,
+                    0.5, 1, 0.5, 0.5, 0.5, 0.5,
+                    0.5, 0.5, 1, 0.5, 0.5, 0.5,
+                    0.5, 0.5, 0.5, 1, 0.5, 0.5,
+                    0.5, 0.5, 0.5, 0.5, 1, 0.5,
+                    0.5, 0.5, 0.5, 0.5, 0.5, 1), nrow=6)
+  
+  e <- mvrnorm(10000, mu, Sigma)
+  
+  LCOE_c <- LCOE_COAL()
+  LCOE_ngcc <- LCOE_NGCC()
+  LCOE_ng_peaking <- LCOE_NG_PEAKING()
+  LCOE_nuclear <- LCOE_NUCLEAR()
+  LCOE_wind <- LCOE_WIND()
+  LCOE_solar_pv <- LCOE_SOLAR_PV()
+  
+  LCOE_c <- matrix(LCOE_c+ e[,1], ncol=1)
+  LCOE_ngcc <- matrix(LCOE_ngcc+ e[,2], ncol=1)
+  LCOE_ng_peaking <- matrix(LCOE_ng_peaking+ e[,3], ncol=1)
+  LCOE_nuclear <- matrix(LCOE_nuclear+ e[,4], ncol=1)
+  LCOE_wind <- matrix(LCOE_wind+ e[,5], ncol=1)
+  LCOE_solar_pv <- matrix(LCOE_solar_pv+ e[,6], ncol=1)
+  
+  ################################################################################
+  ## plot LCOE density for Coal, NGCC, NG_Peaking, Nuclear
+  
+  LCOE_MC_data_matrix <- data.frame(cbind(LCOE_c, LCOE_ngcc, LCOE_ng_peaking, 
+                                          LCOE_nuclear, LCOE_wind, LCOE_solar_pv))
+  
+  colnames(LCOE_MC_data_matrix) <-  c("Coal", "NGCC", "NG_Peaking", "Nuclear", "Wind", "Solar_PV")
+  
+  LCOE_MC_data_matrix <<- LCOE_MC_data_matrix
+  
+  MC_vcov_matrix <- var(LCOE_MC_data_matrix)
+  sd_matrix <- sqrt(diag(MC_vcov_matrix))
+  
+  ################################################################################
+  
+  
+  
+  
+  
+  
   
   output$HistPlot <- renderPlot({
     
@@ -54,6 +125,9 @@ shinyServer(function(input, output) {
       ggtitle("Historical Data")
     
   })
+  
+  
+  
     
     output$tbl1 = DT::renderDataTable(
       
@@ -61,72 +135,12 @@ shinyServer(function(input, output) {
       
       )
     
+    
+    
    
   output$distPlot <- renderPlot({
     
-    ###############################################################################
-    ## Housekeeping
-    library('quadprog')
-    library('MASS')
-    #set.seed(123)
     
-    ###############################################################################
-    
-    ################################################################################
-    ## import LCOE functions
-    source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_COAL.R")
-    
-    source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_NGCC.R")
-    
-    source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_NG_PEAKING.R")
-    
-    source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_NUCLEAR.R")
-    
-    source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_WIND.R")
-    
-    source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_SOLAR_PV.R")
-    ################################################################################
-    
-    ################################################################################
-    ## create variance-covariance matrix framework
-    mu <- c(0,0,0,0,0,0)
-    Sigma <- matrix(c(1, 0.5, 0.5, 0.5, 0.5, 0.5,
-                      0.5, 1, 0.5, 0.5, 0.5, 0.5,
-                      0.5, 0.5, 1, 0.5, 0.5, 0.5,
-                      0.5, 0.5, 0.5, 1, 0.5, 0.5,
-                      0.5, 0.5, 0.5, 0.5, 1, 0.5,
-                      0.5, 0.5, 0.5, 0.5, 0.5, 1), nrow=6)
-    
-    e <- mvrnorm(10000, mu, Sigma)
-    
-    LCOE_c <- LCOE_COAL()
-    LCOE_ngcc <- LCOE_NGCC()
-    LCOE_ng_peaking <- LCOE_NG_PEAKING()
-    LCOE_nuclear <- LCOE_NUCLEAR()
-    LCOE_wind <- LCOE_WIND()
-    LCOE_solar_pv <- LCOE_SOLAR_PV()
-    
-    LCOE_c <- matrix(LCOE_c+ e[,1], ncol=1)
-    LCOE_ngcc <- matrix(LCOE_ngcc+ e[,2], ncol=1)
-    LCOE_ng_peaking <- matrix(LCOE_ng_peaking+ e[,3], ncol=1)
-    LCOE_nuclear <- matrix(LCOE_nuclear+ e[,4], ncol=1)
-    LCOE_wind <- matrix(LCOE_wind+ e[,5], ncol=1)
-    LCOE_solar_pv <- matrix(LCOE_solar_pv+ e[,6], ncol=1)
-    
-    ################################################################################
-    ## plot LCOE density for Coal, NGCC, NG_Peaking, Nuclear
-    
-    LCOE_MC_data_matrix <- data.frame(cbind(LCOE_c, LCOE_ngcc, LCOE_ng_peaking, 
-                                            LCOE_nuclear, LCOE_wind, LCOE_solar_pv))
-    
-    colnames(LCOE_MC_data_matrix) <-  c("Coal", "NGCC", "NG_Peaking", "Nuclear", "Wind", "Solar_PV")
-    
-    LCOE_MC_data_matrix <<- LCOE_MC_data_matrix
-    
-    MC_vcov_matrix <- var(LCOE_MC_data_matrix)
-    sd_matrix <- sqrt(diag(MC_vcov_matrix))
-    
-    ################################################################################
     # Expxected cost of resources in 2022 [million USD/TWh]
     c <- matrix(c(mean(LCOE_c), mean(LCOE_ngcc), mean(LCOE_ng_peaking), mean(LCOE_nuclear), mean(LCOE_wind), mean(LCOE_solar_pv)))
     
@@ -182,62 +196,7 @@ shinyServer(function(input, output) {
   #output$distPlot1 <- renderPlot({
   output$gatePlot <- renderDygraph({
     
-    ################################################################################
-    
-    source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_COAL.R")
-    
-    source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_NGCC.R")
-    
-    source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_NG_PEAKING.R")
-    
-    source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_NUCLEAR.R")
-    
-    source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_WIND.R")
-    
-    source("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Scripts_and_functions/LCOE_SOLAR_PV.R")
-    ################################################################################
-    
-    ################################################################################
-    ## create variance-covariance matrix framework
-    mu <- c(0,0,0,0,0,0)
-    Sigma <- matrix(c(1, 0.5, 0.5, 0.5, 0.5, 0.5,
-                      0.5, 1, 0.5, 0.5, 0.5, 0.5,
-                      0.5, 0.5, 1, 0.5, 0.5, 0.5,
-                      0.5, 0.5, 0.5, 1, 0.5, 0.5,
-                      0.5, 0.5, 0.5, 0.5, 1, 0.5,
-                      0.5, 0.5, 0.5, 0.5, 0.5, 1), nrow=6)
-    
-    e <- mvrnorm(10000, mu, Sigma)
-    
-    LCOE_c <- LCOE_COAL()
-    LCOE_ngcc <- LCOE_NGCC()
-    LCOE_ng_peaking <- LCOE_NG_PEAKING()
-    LCOE_nuclear <- LCOE_NUCLEAR()
-    LCOE_wind <- LCOE_WIND()
-    LCOE_solar_pv <- LCOE_SOLAR_PV()
-    
-    LCOE_c <- matrix(LCOE_c+ e[,1], ncol=1)
-    LCOE_ngcc <- matrix(LCOE_ngcc+ e[,2], ncol=1)
-    LCOE_ng_peaking <- matrix(LCOE_ng_peaking+ e[,3], ncol=1)
-    LCOE_nuclear <- matrix(LCOE_nuclear+ e[,4], ncol=1)
-    LCOE_wind <- matrix(LCOE_wind+ e[,5], ncol=1)
-    LCOE_solar_pv <- matrix(LCOE_solar_pv+ e[,6], ncol=1)
-    
-    ################################################################################
-    ## plot LCOE density for Coal, NGCC, NG_Peaking, Nuclear
-    
-    LCOE_MC_data_matrix <- data.frame(cbind(LCOE_c, LCOE_ngcc, LCOE_ng_peaking, 
-                                            LCOE_nuclear, LCOE_wind, LCOE_solar_pv))
-    
-    colnames(LCOE_MC_data_matrix) <-  c("Coal", "NGCC", "NG_Peaking", "Nuclear", "Wind", "Solar_PV")
-    
-    LCOE_MC_data_matrix <<- LCOE_MC_data_matrix
-    
-    MC_vcov_matrix <- var(LCOE_MC_data_matrix)
-    sd_matrix <- sqrt(diag(MC_vcov_matrix))
-    
-    
-    
+
     # Expxected cost of resources in 2022 [million USD/TWh]
     c <- matrix(c(mean(LCOE_c), mean(LCOE_ngcc), mean(LCOE_ng_peaking), mean(LCOE_nuclear), mean(LCOE_wind), mean(LCOE_solar_pv)))
     
