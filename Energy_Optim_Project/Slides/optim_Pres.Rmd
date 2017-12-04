@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 cat("\014")
 rm(list=ls())
-set.seed(12345)
+set.seed(123)
 options(scipen=999)
 
 library(quadprog)
@@ -46,14 +46,19 @@ optim_model_2022_demand() #histplot and riskPlot
 ## Goal of this Research
 
 ###
-* Develop a quadratic program to determine an optimal mix (portfolio) of energy supplies which minimize the variability of the price of energy in the Texas electricity market.  
 
-* I will use the "Modern Portfolio Theory", introduced by Harry Markowitz in 1952.  
+* Develop a quadratic program to determine an optimal mix (portfolio) of energy supplies which minimize the variability of the price of energy in the Texas electricity market.
+
+* I will use the "Modern Portfolio Theory", introduced by Harry Markowitz in 1952.
+
+* Model Energy Costs using Monte Carlo Simulation.
+
 * When used in Electric Power System optimization modeling, Merlin and Back (1975) note that we are interested in both minimizing expected cost and minimizing risk. This is a multi-objective optimization problem and there is always a trade-off between these two objectives.
 
 ## Background
 
 ###
+
 * **My study is focused exclusively on the Texas Electric Grid.**
 
 * The Texas Grid is managed by The Electric Reliability Council of Texas (ERCOT).
@@ -222,9 +227,9 @@ $n$ is the number of payments, assumed to be the lifetime of the plant.
 ### My Approach in this Study
 
 1.  Calculate LCOE by Monte Carlo Simulation.
-    * Draw LCOE Cost Paramaters from various statistical distributions.
+    * Draw LCOE Cost Parameters from various statistical distributions.
     * Distributional choice is determined by historical data on costs across energy sources.
-    * Collate point source data from EIA and LAZARD LCOE reports. Use the data to establish boundary conditions for the choosen distributions.
+    * Collate point source data from EIA and LAZARD LCOE reports. Use the data to establish boundary conditions for the chosen distributions.
     
     ![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/LCOE_MC_Dist_Table.png)
 
@@ -379,4 +384,21 @@ p1
 
 ################################################################################
 ```
+
+## What next
+
+### Directions for Future Research
+
+* Bootstrap the variance-covariance matrix.
+
+* Enrich the LCOE calculations with additional parameters and better data.
+
+* Model the variance-covariance using SUR.
+
+* Model the LCOE using ARCH/GARCH modeling.
+
+
+
+
+
 
