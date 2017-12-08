@@ -24,7 +24,7 @@ header-includes:
 - \usepackage{mathrsfs}
 - \usepackage{eso-pic,graphicx,transparent}
 
-abstract: "The Texas electricity market is currently undergoing rapid change in several key areas. These changes are rewriting the way Texas electricity providers provision for future demand and ever growing uncertainties within the Texas electricity grid. This paper develops a framework to model uncertaintiy withiin the cost structure of building new power generation technologies to meet increasing future demands. We will employ monte carlo simulation to model the Levelized Cost of Electricity with a multivariate normal error term embeded in each energy source cost estimation. This allows us to develop an covariance structure between different energy sources which can be used to determine an optimal mix (portfolio) of energy supplies which minimize the variability of the price of energy in the Texas electricity market."
+abstract: "The Texas electricity market is currently undergoing rapid change in several key areas. These changes are rewriting the way Texas electricity providers provision for future demand and ever growing uncertainties within the Texas electricity grid. This paper develops a framework to model uncertaintiy withiin the cost structure of building new power generation production facilities to meet increasing future demands. We will employ monte carlo simulation to model the Levelized Cost of Electricity with a multivariate normal error term embeded in each energy source cost equation. This allows us to develop a covariance structure between the different energy sources which can be used to determine an optimal mix (portfolio) of energy supplies which minimize the variability of the price of energy in the Texas electricity market while at the same time keeping costs low for residential and commercial users."
 
 bibliography: ERCOT_LCOE_optim.bib
 csl: computational-economics.csl
@@ -41,5 +41,110 @@ geometry: margin = 1.25in
   }
 }
 
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+library(readr)
+
+household_costs_by_state <- read_csv("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/paper/ERCOT Energy Portfolio Optimization_draft/data/household _costs_by_state.csv")
+
+Commercial_costs_by_state <- read_csv("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/paper/ERCOT Energy Portfolio Optimization_draft/data/Commercial _costs_by_state.csv")
+
+energy_mix_percent_csv <- read_csv("/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/paper/ERCOT Energy Portfolio Optimization_draft/data/energy_mix_percent_csv.csv")
+
+```
 
 
+Over the past several decades the Texas electricity market has seen large change in several key areas. Many of these changes have been slow and predictible while others have been quick and hard to imagine. It is the unimaginable scenerios where modeling solutions fail unless a robust mechanism is embedded within the model to account for large variations across wide and interconnected situations.
+
+This paper will develop a Quadratic Program to determine an optimal mix (portfolio) of energy supplies which minimize the variability of the price of energy in the Texas electricity market. I will use the “Modern Portfolio Theory”, introduced by Harry Markowitz [-@Markowitz:1952tg] to help gain insight into this problem. The two central themes of Marowitz theory are,  
+  
+* to maximize return for any level of risk;
+
+* risk can be reduced by creating a diversified portfolio of unrelated assets.
+
+In the context of this paper, we can reformulate Marowitz idea to developed an optimized portfilio of energy sources that can be used to help determine the directions for future invenstments in new electricity production facilities in the State of Texas. When used in Electric Power System optimization modeling, Merlin and Back [-@Merlin:ue] note that we are interested in both minimizing expected cost and minimizing risk. This is a multi-objective optimization problem and there is always a trade-off between these two objectives.
+
+Currently, the approach that has most often been employed to determine the optimal portfolio of energy sources has been to evaluate the Levelized Cost of Electricity (LCOE) across all energy sources of interest. This allows us to normalize the costs of energy sources so a direct comparison can be made. Without this normalization it is unclear what it means to compare the cost of generation electricity using coal with the cost of generating electricity using wind. Once the levelized costs have been determined they can be plugged into an optimixation model to determine the ideal portfolio of energy sources. LCOE calculations are generally computed as point source estimates of costs (U.S. Energy Information Admin. (EIA), U.S. Department of Energy (DOE), The National Renewable Energy Lab (NREL), LAZARD, and Sandia National Lab). If uncertainty is incorporated in the LCOE calculations at all, it is usually obtained by varying one paramater while holding all other paramaters constant, ie. varying fuel costs to determine the upper and lower bound on LCOE when fuel costs fluxuate. This approach to incorporating uncertainty within the LCOE structure is lacking in a few areas. It is possible, and indeed likely, that multiple paramaters are varying simultaniously. These fluctions will be missed entirely by hold them constant. In addition, it is possible for many of the energy sources to have interdependeence. In other words, the costs of fuel between combustion cycle natural gas, peaking natural gas, and coal are likely to move in directions which are related, either positivly or negativly. These relationships have been ommitted in pevious studies. Our paper seeks to fill this void by using monte carlo simulation to model the Levelized Cost of Electricity with a multivariate normal error term embeded in each energy source cost equation. This allows us to develop a covariance structure between the different energy sources which can be used to determine an optimal mix (portfolio) of energy supplies which minimize the variability of the price of energy in the Texas electricity market while at the same time keeping costs low for residential and commercial users. 
+
+Section 1 provides a breif backgroud on the structure and management of the Texas electricity market. Various challanges faced by the Texas electricity market will shape the landscape for future energy sources. These challenges will be explored in this section. Section 2 will detail the monte carlo simulation approach to modeling LCOE and how the covariance structure is developed. Section 3 details the optimization model used and the model constraints employed, Section 4 provides results and discussion and section 5 concludes.
+
+# Background
+
+The Texas Grid is managed by The Electric Reliability Council of Texas (ERCOT). ERCOT has a long and diverse history that reaches back to the start of World War II (WWII). The precousor to ERCOT was formed during the start of WWII (1951) when several Texas utilities banded together to form an interconnection that sent power from disperate locations in the state to the gulf coast to aid in the war effort. The utilities recognized the stability the interconnection provided and after the war had ended the utilities decided to remain interconnected. They estabilished two monitoring stations, one in the northern part of Texas and on in the south. This group of interconnected utilities became known as the Texas Interconnected System (TIS). The North American Electric Reliability Council (NERC) was formed in 1968 and as charged with ensureing the reliability of the North American bulk power system. As a result of the formation of NERC, TIS was motivated to form ERCOT in 1970 to comply with NERC. ERCOT is a membership-based 501(c)(4) nonprofit corporation, governed by a board of directors and subject to oversight by the Public Utility Commission of Texas and the Texas Legislature. ERCOT currently manages the flow of electric power to 24 million Texas customers representing about 90 percent of the state’s electric load.
+
+Of the many challanges facing EROCT when considering how to design the electricity grid of the future is the uncertainty in demand. Demand uncertainties can arrise from increases in population and business developement, changes in state or ferderal regulation, structural changes that stem from new technologies such as electric vehicals which require grid power for recharge, and the ever present weather uncertainties. Of these demand shifters, population increases and demand shocks from electric vehicals stand to pose the greatest challange when trying to provision power today to meet demands in the future.
+
+The State of Texas has enjoyed a large increase in population as families are attracted by high paying wages and low cost of living. At the same time, Texas has developed a friendly regulatory environment for business which has attracted both large cooporations and small businesses alike. From an economic standoint this has propelled Texas to the front of the line as a leader in economic growth and development. With this growth in population and business the demand for electricity has progresivly increased and these increases need to be accomidated to allow Texas to continue to be sucessful.   
+
+\bigskip
+
+```{r echo=FALSE, fig.height=4, fig.width=6}
+par(ps = 8, cex = 1, cex.main = 1)
+years <- c(2008:2016)
+plot(x=years, y=energy_mix_percent_csv[13,2:10], type="o", xlab = "Years", ylab = "Total Annual Demand (TWh)", main = "Texas Electricity Annual Demand Increase")
+
+```
+
+Despite increases in demand for electricity, Texas has maintained some of the lowest costs per kilowatt-hour for both residential and commercial use. Maintaing low costs on the supply side is essiential to the ability of electricity porducers to maintain low costs on the consumer side. Maintaning low cost of service presents a unique challange for producers who are tasked with meeting the current demands for electricity and planning for future demand increases.
+
+
+```{r echo=FALSE, fig.height=6}
+
+par(mfrow=c(1,2))
+
+dotchart(household_costs_by_state$Average, labels=(household_costs_by_state$STATE),cex=.7,
+         main="Residential Cost of Electricity", 
+         xlab="cents/kWh")
+
+dotchart(Commercial_costs_by_state$Average, labels=(Commercial_costs_by_state$STATE),cex=.7,
+         main="Commercial Cost of Electricity", 
+         xlab="cents/kWh")
+```
+
+Electric vehicals, while representing less than one percent market share today, have the potiential in the future to tax the electricity grid to the point of failure. It is projected that electric vehical sales will make up 65% of new light duty vhecical sales by the year 2050. The demands on the power grid will be non-trivial. Each new electric vehical, assuming current technology, adds the equivalent of one new house to the electricity grid landscape. This demand increase needs to be considered today so that grid capacity can be avvailable when needed.
+
+
+
+# Monte Carlo Simulation and Covariance Model
+
+
+
+
+
+
+# Optimization Model
+
+
+
+# Results and Discussions
+
+
+
+# Conclusions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+
+# References  
