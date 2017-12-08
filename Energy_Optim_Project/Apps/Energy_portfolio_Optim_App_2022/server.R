@@ -171,7 +171,7 @@ shinyServer(function(input, output) {
     
     # constraints A=LHS, b=RHS
     A <- rbind(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
-    b <- c(d, 0, 0, 0, 0, 0, 0, 0, d*.6, -d*0.9, -d*0.9, -d*0.9, -d*0.07, -d*0.25, d*.1)
+    b <- c(d, 0, 0, 0, 0, 0, 0, 0, d*.6, -d*0.9, -d*0.9, -d*0.9, -d*0.07, -d*0.25, d*0.1)
     
     qp <- solve.QP(Dmat=Q1, dvec=R, Amat=t(A), bvec=b, factorized=F)
     
@@ -230,7 +230,7 @@ shinyServer(function(input, output) {
       a10 <- matrix(c(0, 0, -1, 0, 0, 0), nrow=1) # 10% <= ng gas peaking
       
       A_range <- rbind(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
-      b <- c(d, 0, 0, 0, 0, 0, 0, 0, d*.6, -d*0.9, -d*0.9, -d*0.9, -d*0.07, -d*0.25, d*.1)
+      b <- c(d, 0, 0, 0, 0, 0, 0, 0, d*.6, -d*0.9, -d*0.9, -d*0.9, -d*0.07, -d*0.25, d*0.1)
       
       qp_range <- solve.QP(Dmat=Q1, dvec=R, Amat=t(A_range), bvec=b)
       qp.value[i,1] <- qp_range$value

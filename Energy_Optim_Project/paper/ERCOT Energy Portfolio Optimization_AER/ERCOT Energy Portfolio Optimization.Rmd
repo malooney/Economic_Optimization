@@ -1,0 +1,74 @@
+---
+title: "ERCOT Energy Portfolio Optimization"
+short: "A shorter title"
+journal: "AER" # AER, AEJ, PP, JEL
+month: "`r lubridate::month(Sys.time())`"
+year: "`r lubridate::year(Sys.time())`"
+vol: 1
+issue: 1
+jel:
+  # - A10
+  # - A11
+keywords:
+  # - LCOE
+  # - optimization
+  # - monte carlo simulation
+author:
+  - name: Matthew Aaron Looney
+    firstname: Matthew
+    surname: Looney
+    email: matthew.looney@ttu.edu
+    affiliation: Texas Tech University
+acknowledgements: |
+  Acknowledgements
+abstract: |
+  Abstract goes here
+output: rticles::aea_article
+bibliography: references.bib
+link-citations: true
+fontsize: 12pt
+geometry: margin = 1.25in
+header-includes:
+- \usepackage{graphicx}
+- \usepackage{rotating}
+- \usepackage{longtable}
+- \usepackage{amssymb,amsmath}
+- \usepackage{dcolumn}
+- \usepackage{setspace}\doublespacing
+- \usepackage{mathrsfs}
+- \usepackage{eso-pic,graphicx,transparent}
+---
+
+
+Testjkjhjkhjkhkjhkjhjkhjkhkjhkjhckjhsxcjkvhsdkjvhkjsdhvkjsdhvkjsdhvkjdshvkjdshkvjhsdkjvhsdkjhvkdsjhvkjdshvsdjhvkjsdhvkjhdskjvhsdjvhkjsdhvkjsdhvkjsdhvkjhsdkvhjdksvhjk
+
+[@Geissmann:2017ux]
+
+<!-- \section{First Section in Body} -->
+
+<!-- Sample figure: -->
+
+<!-- \begin{figure} -->
+<!-- Figure here. -->
+
+<!-- \caption{Caption for figure below.} -->
+<!-- \begin{figurenotes} -->
+<!-- Figure notes without optional leadin. -->
+<!-- \end{figurenotes} -->
+<!-- \begin{figurenotes}[Source] -->
+<!-- Figure notes with optional leadin (Source, in this case). -->
+<!-- \end{figurenotes} -->
+<!-- \end{figure} -->
+
+
+
+<!-- References here (manual or bibTeX). If you are using bibTeX, add your bib file -->
+<!-- name in place of BibFile in the bibliography command. -->
+<!-- % Remove or comment out the next two lines if you are not using bibtex. -->
+\bibliographystyle{aea}
+\bibliography{references}
+
+<!-- % The appendix command is issued once, prior to all appendices, if any. -->
+\appendix
+
+\section{Mathematical Appendix}

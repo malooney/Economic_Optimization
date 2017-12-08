@@ -1,0 +1,73 @@
+% AER-Article.tex for AEA last revised 22 June 2011
+\documentclass[AER]{AEA}
+
+% The mathtime package uses a Times font instead of Computer Modern.
+% Uncomment the line below if you wish to use the mathtime package:
+%\usepackage[cmbold]{mathtime}
+% Note that miktex, by default, configures the mathtime package to use commercial fonts
+% which you may not have. If you would like to use mathtime but you are seeing error
+% messages about missing fonts (mtex.pfb, mtsy.pfb, or rmtmi.pfb) then please see
+% the technical support document at http://www.aeaweb.org/templates/technical_support.pdf
+% for instructions on fixing this problem.
+
+% Note: you may use either harvard or natbib (but not both) to provide a wider
+% variety of citation commands than latex supports natively. See below.
+
+% Uncomment the next line to use the natbib package with bibtex
+\usepackage{natbib}
+
+% Uncomment the next line to use the harvard package with bibtex
+%\usepackage[abbr]{harvard}
+
+% This command determines the leading (vertical space between lines) in draft mode
+% with 1.5 corresponding to "double" spacing.
+\draftSpacing{1.5}
+
+\usepackage{hyperref}
+
+\begin{document}
+
+\title{ERCOT Energy Portfolio Optimization}
+\shortTitle{A shorter title}
+% \author{Author1 and Author2\thanks{Surname1: affiliation1, address1, email1.
+% Surname2: affiliation2, address2, email2. Acknowledgements}}
+
+
+\author{
+  Matthew Aaron Looney\thanks{
+  Looney: Texas Tech University, \href{mailto:matthew.looney@ttu.edu}{matthew.looney@ttu.edu}.
+}
+}
+
+\date{\today}
+\pubMonth{12}
+\pubYear{2017}
+\pubVolume{1}
+\pubIssue{1}
+\JEL{}
+\Keywords{}
+
+\begin{abstract}
+Abstract goes here
+\end{abstract}
+
+
+\maketitle
+
+Testjkjhjkhjkhkjhkjhjkhjkhkjhkjhckjhsxcjkvhsdkjvhkjsdhvkjsdhvkjsdhvkjdshvkjdshkvjhsdkjvhsdkjhvkdsjhvkjdshvsdjhvkjsdhvkjhdskjvhsdjvhkjsdhvkjsdhvkjsdhvkjhsdkvhjdksvhjk
+
+(Geissmann \protect\hyperlink{ref-Geissmann:2017ux}{2017})
+
+\bibliographystyle{aea}\bibliography{references}
+
+\appendix
+
+\section{Mathematical Appendix}
+
+\hypertarget{refs}{}
+\hypertarget{ref-Geissmann:2017ux}{}
+Geissmann, Thomas. 2017. ``A probabilistic approach to the computation
+of the levelized cost of electricity.'' \emph{Energy} 124: 372--81.
+
+\end{document}
+

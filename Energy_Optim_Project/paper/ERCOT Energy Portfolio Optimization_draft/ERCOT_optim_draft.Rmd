@@ -1,0 +1,45 @@
+---
+title: "ERCOT Energy Portfolio Optimization"
+subtitle: ""
+author: "Matthew Aaron Looney"
+date: "Current Date"
+
+output:
+  pdf_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: no
+    toc_depth: 4
+  html_document:
+    toc: yes
+    toc_depth: '4'
+    
+header-includes:
+- \usepackage{graphicx}
+- \usepackage{rotating}
+- \usepackage{longtable}
+- \usepackage{amssymb,amsmath}
+- \usepackage{dcolumn}
+- \usepackage{setspace}\doublespacing
+- \usepackage{mathrsfs}
+- \usepackage{eso-pic,graphicx,transparent}
+
+abstract: "The Texas electricity market is currently undergoing rapid change in several key areas. These changes are rewriting the way Texas electricity providers provision for future demand and ever growing uncertainties within the Texas electricity grid. This paper develops a framework to model uncertaintiy withiin the cost structure of building new power generation technologies to meet increasing future demands. We will employ monte carlo simulation to model the Levelized Cost of Electricity with a multivariate normal error term embeded in each energy source cost estimation. This allows us to develop an covariance structure between different energy sources which can be used to determine an optimal mix (portfolio) of energy supplies which minimize the variability of the price of energy in the Texas electricity market."
+
+bibliography: ERCOT_LCOE_optim.bib
+csl: computational-economics.csl
+link-citations: true
+fontsize: 12pt
+geometry: margin = 1.25in
+---
+
+\AddToShipoutPictureFG{
+  \AtPageCenter{% or \AtTextCenter
+    \makebox[0pt]{\rotatebox[origin=c]{45}{%
+      \scalebox{5}{\texttransparent{0.05}{DRAFT}}%
+    }}
+  }
+}
+
+
+
