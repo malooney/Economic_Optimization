@@ -1,0 +1,9 @@
+Inputs,Coal,Natural Gas - CC,Natural Gas - Peaking,Nuclear,Wind,Solar - PV
+Capital Cost ($/KW),Log Normal,Log Normal,Triangular,Log Normal,Normal,Log Normal
+"Interest Rate (%, yr)",Triangular,Triangular,Triangular,Constant,Constant,Constant
+Loan Term (yrs),Constant,Constant,Constant,Constant,Constant,Constant
+Fixed Cost OM ($/KW/yr),Normal,Triangular,Log Normal,Normal,Triangular,Normal
+Fuel Cost ($/MMBtu),Normal,Triangular,Triangular,Constant,NA,NA
+Heat Rate (Btu/KWh),Normal,Normal,Normal,Normal,NA,NA
+Variable Cost OM ($/MWh),Normal,Normal,Log Normal,Triangular,Log Normal,NA
+Capacity Factor (%),Constant,Triangular,Normal,Normal,Constant,Normal
