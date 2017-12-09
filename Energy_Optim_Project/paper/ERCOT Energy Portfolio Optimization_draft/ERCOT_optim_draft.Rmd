@@ -199,7 +199,7 @@ A full list of constraints used in the model are as follows:
 
 \begin{equation*}
 \left[\begin{aligned}
-  \sum\limits_{i = 1}^6 {{x_i}}  \leqslant d_{385}{\text{     2022 Energy Demand}} \hfill \\
+  \sum\limits_{i = 1}^6 {{x_i}}  \geqslant d_{385}{\text{     2022 Energy Demand}} \hfill \\
   \frac{{\sum\limits_{i = 1}^6 {{c_i}{x_i}} }}{{\sum\limits_{i = 1}^6 {{x_i}} }} \leqslant {c_{max_{100}}}{\text{     maximum expected cost}} \hfill \\
   {x_i} \geqslant 0,{\text{     }}\forall i{\text{     non - negativity}} \hfill \\
 \end{aligned}\right]
