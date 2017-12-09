@@ -155,7 +155,7 @@ stargazer(LCOE_MC_data_matrix, header=F, type="latex", summary = T, font.size = 
 ```
   
 ![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/paper/ERCOT Energy Portfolio Optimization_draft/Graphs_and_Charts/LCOE_MC_Dist_Table.png)
-
+  
 A density plot of the monte carlo derived distributions of energy sources is provided below.  
   
 ```{r echo=FALSE, message=FALSE, results='asis', cache=F, fig.height=2}
@@ -198,33 +198,35 @@ Technical constraints on electricity generation are taken from varous sources in
 
 A full list of constraints used in the model are as follows:
 
-\[\begin{gathered}
-  \sum\limits_{i = 1}^6 {{x_i}}  \leqslant d{\text{     2022 Energy Demand}} \hfill \\
-  \frac{{\sum\limits_{i = 1}^6 {{c_i}{x_i}} }}{{\sum\limits_{i = 1}^6 {{x_i}} }} \leqslant {c_{max}}{\text{     maximum expected cost}} \hfill \\
+\begin{equation*}
+\left[\begin{aligned}
+  \sum\limits_{i = 1}^6 {{x_i}}  \leqslant d_{385}{\text{     2022 Energy Demand}} \hfill \\
+  \frac{{\sum\limits_{i = 1}^6 {{c_i}{x_i}} }}{{\sum\limits_{i = 1}^6 {{x_i}} }} \leqslant {c_{max_{100}}}{\text{     maximum expected cost}} \hfill \\
   {x_i} \geqslant 0,{\text{     }}\forall i{\text{     non - negativity}} \hfill \\
+\end{aligned}\right]
+\left[\begin{aligned}
   {\text{Sola}}{{\text{r}}_{pv}} \leqslant 7\%  \hfill \\
   Wind \leqslant 25\%  \hfill \\
   N{G_{peaking}} \geqslant 10\%  \hfill \\
-  \left. \begin{gathered}
   {x_1} = N{G_{cc}} \leqslant 90\%  \hfill \\
   {x_2} = Coal \leqslant 90\%  \hfill \\
   {x_3} = Nuclear \leqslant 90\%  \hfill \\ 
-\end{gathered}  \right\}{\text{     Upper Limit}} \hfill \\
-  \left. {\sum\limits_{i = 1}^3 {{x_i}}  \geqslant 60\% } \right\}{\text{     Lower Limit}} \hfill \\ 
-\end{gathered} \]
+   {\sum\limits_{i = 1}^3 {{x_i}}  \geqslant 60\% }
+\end{aligned}\right]
+\end{equation*}
 
 # Results and Discussions
 
-The output from the quadratic program is listed in Figure 2. According to the model the optimal portfolio of energy supplies which minimize the variability of the price of energy in the Texas electricity market are given by 14.45% coal, 29% combustion cycle natural gas, 10% peaking natural gas, 20.14% nuclear, 25% wind, and 1.4% solar. These values make sense when we consider the high variance on peaking natural gas and solar. The constraint on peaking natural gas is active which suggests the amount could be higher which is a bit surprising, but peaking gas is required since this source is brought online when peak demand exceeds  
+The output from the quadratic program is listed in Figure 2. According to the model, the optimal portfolio of energy supplies which minimize the variability of the price of energy in the Texas electricity market are: 14.45% coal, 29% combustion cycle natural gas, 10% peaking natural gas, 20.14% nuclear, 25% wind, and 1.4% solar. These values make sense when we consider the high variance on peaking natural gas and solar. The constraint on peaking natural gas is active which suggests the amount could be higher which is a bit surprising, but peaking gas is required since this source is brought online when peak demand exceeds available capacity. The constraint on wind is also active. When we relax the constraint on wind the amount of wind in the portfolio increases. This suggests wind is a viable and desierable energy source in the Texas market.
 
+The variance-covariance shown in Figure 2 list two different scenerios. The first shows the covariance matrix where we have allowed cross-correlations between the energy sources. In the second covariance matrix all covariance is set to zero. We notice there is not much change between the two scenerios but this could be due to inadequate development of the covariance structure. To more properly develop the covariance structure we will need to bootstrp the variance-covariance matrix to obtain a structure more representative of the population. However, we do detect a small change between the two portfolios and when considering large costs, a small percentage change equals a large cost difference.
 
 ![](/Users/malooney/Google Drive/digitalLibrary/*AAEC6305_Economic_Optimization/Economic_Optimization/Energy_Optim_Project/Graphs_and_Charts/optim_table_results.png)
 
 # Conclusions
 
+Understanding the cost structure of different energy sources in the Texas electricity market is critical to the ability of electricity producers to porperly determine the appropriate mix of energy sources to staisfy future demands. This study developed a cost system which allowed more uncertainty to enter the Levelized Cost of Electricity equation through the use of monte carlo simulation. By drawing random variables from prespecified statistical distributions we have allowed the paramaters the enter the LCOE equations to vary and this more realistically capture the variance of those paramaters. We have also developed a framework to allow cross-correlations between energy sources, a critical componenet to more fully understand the optimal portfilio of electricity sources. The goal of determining an optimal portfolio is to minimize variation and minimize costs. Without a proper modeling of the variations witin the cost structure we are in danger of reaching false conclusions.
 
-
-
-
+This study is a first step in trying to develop a more coprehensive model of uncertainty that reside within the cost structures of energy production. More work is needed to better deveop this framework. Bootstrapping the variance-covariance matrix is needed to better represent the population covriance structure. This study omited costs associated with carbon sequestration, a large ommission but an ommission that was necessary to develop a baseline model. Future studies need to incorporate a cost structure for carbon abatement. This study used natioal level data for the cost paramater boundry conditions. While some regional specific information was avalable most papramaters were aggrigated on a national level. Future studies should enrich the LCOE calculations with more regional specific data. 
 
 # References  
