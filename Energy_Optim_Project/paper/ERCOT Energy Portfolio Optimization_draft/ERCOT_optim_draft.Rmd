@@ -94,13 +94,13 @@ a <- household_costs_by_state[order(-household_costs_by_state$Average),]
 dotchart(a$Average, 
          labels=(a$STATE),cex=.7,
          main="Residential Cost of Electricity", 
-         xlab="cents/kWh")
+         xlab="cents/kWh (2016)")
 
 b <- Commercial_costs_by_state[order(-Commercial_costs_by_state$Average),]
 dotchart(b$Average, 
          labels=(b$STATE),cex=.7,
          main="Commercial Cost of Electricity", 
-         xlab="cents/kWh")
+         xlab="cents/kWh (2016)")
 ```
 
 Electric vehicles, while representing less than one percent market share today, have the potential, in the future, to stress the electricity grid to the point of failure. It is projected that electric vehicles will make up 65% of new light duty vehicle sales by the year 2050. The demands on the power grid from these electric vehicles will be non-trivial. Each new electric vehicle, assuming current technology, adds the equivalent of one new house to the electricity grid landscape. This demand increase needs to be considered today so that grid capacity can be available when needed in the future. 
