@@ -74,7 +74,7 @@ The Texas electrcity grid is managed by The Electric Reliability Council of Texa
 
 One of the many challenges facing EROCT, while considering how best to design the electricity grid of the future, is the uncertainty in demand. Demand uncertainties can emerge from many locations, including increases in population and business development, changes in state and federal regulation, structural changes that stem from new technologies, such as electric vehicles which require grid power for recharge, and the ever present weather uncertainties. Of these demand shifters, population increase and demand shocks from electric vehicles stand poised to present the greatest challenge for ERCOT. Power used tomorrow needs to be provision for today.
 
-The State of Texas has enjoyed rapid increases in population and remains at the top of the list as one of the fastest growing states in the union. Families are attracted to the state by high wages and low cost of living. At the same time, Texas has developed a business friendly regulatory environment which has attracted both large corporations and small businesses alike. From an economic standpoint this has propelled Texas to the front of the line as a leader in economic growth and development. With this growth in population and business, the demand for electricity has progressively increased and these increases need to be accommodated to allow Texas to continue to be successful.   
+The State of Texas has enjoyed rapid increases in population and remains at the top of the list as one of the fastest growing states in the union. Families are attracted to the state by high wages and low cost of living. At the same time, Texas has developed a business friendly regulatory environment which has attracted both large corporations and small businesses alike. From an economic standpoint this has propelled Texas to the front of the line as a leader in economic growth and development. With this growth in population and business, the demand for electricity has progressively increased and these increases need to be accommodated for Texas to continue to be successful.   
 
 \bigskip
 
@@ -103,11 +103,11 @@ dotchart(b$Average,
          xlab="cents/kWh")
 ```
 
-Electric vehicles, while representing less than one percent market share today, have the potential in the future to stress the electricity grid to the point of failure. It is projected that electric vehicle sales will make up 65% of new light duty vehicle sales by the year 2050. The demands on the power grid from these electric vehicles will be non-trivial. Each new electric vehicle, assuming current technology, adds the equivalent of one new house to the electricity grid landscape. This demand increase needs to be considered today so that grid capacity can be available when needed in the future. 
+Electric vehicles, while representing less than one percent market share today, have the potential, in the future, to stress the electricity grid to the point of failure. It is projected that electric vehicles will make up 65% of new light duty vehicle sales by the year 2050. The demands on the power grid from these electric vehicles will be non-trivial. Each new electric vehicle, assuming current technology, adds the equivalent of one new house to the electricity grid landscape. This demand increase needs to be considered today so that grid capacity can be available when needed in the future. 
 
 # Monte Carlo Simulation and Covariance Model
 
-The ability of ERCOT to meet growing electricity demands is predicated on two main considerations; accurate forecasting of future needs, and accurate cost estimates for generating units. While both of these areas have the potential to inject substantial levels of uncertainty the main focus of this paper is to model the uncertainty related to costs. Measuring costs is generally thought to be the first step toward the understanding of an optimal electricity mix. To this end, we will estimate the Levelized Cost of Electricity (LCOE) using Monte Carlo simulation for six electricity sources; coal, combustion cycle natural gas, peaking natural gas, nuclear, wind, and solar. 
+The ability of ERCOT to meet growing electricity demands is predicated on two main considerations; accurate forecasting of future needs, and accurate cost estimates for generating units. While both of these areas have the potential to inject substantial levels of uncertainty, the main focus of this paper is to model the uncertainty related to costs. Measuring costs is generally thought to be the first step toward the understanding of an optimal electricity mix. To this end, we will estimate the Levelized Cost of Electricity (LCOE) using Monte Carlo simulation for six electricity sources; coal, combustion cycle natural gas, peaking natural gas, nuclear, wind, and solar. 
 
 The most reliable estimates of future Levelized costs have be modeled by the U.S. Energy Information Administration (EIA) and the LAZARD Investment Group. Both of these estimates fail to incorporate robust modeling of uncertainty and neither estimate contains information related to the covariance structure between the energy source profiles.
 
@@ -183,10 +183,11 @@ This gives the following LCOE with the correlated error term embedded:
 
 To determine an optimal portfolio of energy supplies which minimize the variability of the price of energy we will use a quadratic programming model. The optimization model takes the following form:
 
-\[\min \sum\limits_{i = 1}^6 {{{({\Sigma }{x_i})}^2}} {\text{     subject to:  constraints}}\]
+\[\min (\bf{x}\Sigma \bf{x}'){\text{     subject to:  constraints}}\]
 
 where,  
   
+$\bf{x}$ is a vector of energy sources (1,...,6),  
 $i$ indexes over the sources (1,...,6),  
 $x_i$ is the power provisioned from resource $i$ [TWh],  
 $c_i$ is the expected cost of resource $i$ in 2022 [million USD/TWh],  
@@ -219,7 +220,7 @@ A full list of constraints used in the model are as follows:
 
 # Results and Discussions
 
-The output from the quadratic program is listed in Figure 2. According to the model, the optimal portfolio of energy supplies which minimize the variability of the price of energy in the Texas electricity market are: 14.45% coal, 29% combustion cycle natural gas, 10% peaking natural gas, 20.14% nuclear, 25% wind, and 1.4% solar. These values make sense when we consider the high variance on peaking natural gas and solar. The constraint on peaking natural gas is active which suggests the amount would be lower, but peaking gas is required since this source is brought online when peak demand exceeds available capacity. The constraint on wind is also active. When we relax the constraint on wind the amount of wind in the portfolio increases. This suggests wind is a viable and desirable energy source in the Texas market.
+The output from the quadratic program is listed in Figure 2. According to the model, the optimal portfolio of energy supplies which minimize the variability of the price of energy in the Texas electricity market are: 14.45% coal, 29% combustion cycle natural gas, 10% peaking natural gas, 20.14% nuclear, 25% wind, and 1.4% solar. These values make sense when we consider the high variance on peaking natural gas and solar. The constraint on peaking natural gas is active which suggests the amount would be lower, but peaking gas is required since this source is brought online when peak demand exceeds available baseline capacity. The constraint on wind is also active. When we relax the constraint on wind the amount of wind in the portfolio increases. This suggests wind is a viable and desirable energy source in the Texas market.
 
 The variance-covariance shown in Figure 2 list two different scenarios. The first shows the covariance matrix where we have allowed cross-correlations between the energy sources. In the second covariance matrix all covariance is set to zero. We notice there is not much change between the two scenarios but this could be due to inadequate development of the covariance structure. To more properly develop the covariance structure we will need to bootstrap the variance-covariance matrix to obtain a structure more representative of the population. However, we do detect a small change between the two portfolios and when considering large costs, a small percentage change equals a large cost difference.
 
